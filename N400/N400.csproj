@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D3DC967D-F589-4ECC-99F0-8E118535035A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>N400</RootNamespace>
+    <AssemblyName>N400</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\N400.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataQueues\DataQueue.cs" />
+    <Compile Include="DataQueues\DataQueueAuthority.cs" />
+    <Compile Include="DataQueues\DataQueueEntry.cs" />
+    <Compile Include="Packets\DataQueueClearRequest.cs" />
+    <Compile Include="Packets\DataQueueCreateRequest.cs" />
+    <Compile Include="Packets\DataQueueDeleteRequest.cs" />
+    <Compile Include="Packets\DataQueueExchangeAttributesRequest.cs" />
+    <Compile Include="Packets\DataQueueReadRequest.cs" />
+    <Compile Include="Packets\DataQueueReadResponse.cs" />
+    <Compile Include="Packets\DataQueueReturnCodeResponse.cs" />
+    <Compile Include="Packets\DataQueueWriteRequest.cs" />
+    <Compile Include="Services\Connection.cs" />
+    <Compile Include="Globalization\EbcidicConverter.cs" />
+    <Compile Include="Globalization\LocaleMapping.cs" />
+    <Compile Include="Packets\Packet.cs" />
+    <Compile Include="Packets\RandomSeedExchangeRequest.cs" />
+    <Compile Include="Packets\RandomSeedExchangeResponse.cs" />
+    <Compile Include="Packets\SignonInfoRequest.cs" />
+    <Compile Include="Packets\SignonInfoResponse.cs" />
+    <Compile Include="Packets\SignonSeedExchangeSeedRequest.cs" />
+    <Compile Include="Packets\SignonSeedExchangeResponse.cs" />
+    <Compile Include="Packets\ResponsePacket.cs" />
+    <Compile Include="Packets\StartServerRequest.cs" />
+    <Compile Include="Packets\StartServerResponse.cs" />
+    <Compile Include="PortMapperMode.cs" />
+    <Compile Include="Security\PasswordEncrypt.cs" />
+    <Compile Include="Security\PasswordEncryptDES.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="PortMapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DataQueueService.cs" />
+    <Compile Include="Services\RemoteCommandService.cs" />
+    <Compile Include="Services\Service.cs" />
+    <Compile Include="Services\SignonService.cs" />
+    <Compile Include="StreamExtensions.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
