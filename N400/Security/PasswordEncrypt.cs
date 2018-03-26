@@ -70,13 +70,12 @@ namespace N400.Security
             if (password.Length > 10)
                 throw new ArgumentException("Password too long.", nameof(password));
 
+            // all values are upper case
             var userEbcidic = EbcidicConverter.ToEbcidic(userId.ToUpperInvariant());
             var passEbcidic = EbcidicConverter.ToEbcidic(password.ToUpperInvariant());
             // make fixed sized 0x40-filled buffers
-            var userBuf = new byte[10].Select(x => (byte)0x40).ToArray();
-            var passBuf = new byte[10].Select(x => (byte)0x40).ToArray();
-            userEbcidic.CopyTo(userBuf, 0);
-            passEbcidic.CopyTo(passBuf, 0);
+            var userBuf = EbcidicConverter.ToPadded(userEbcidic, 10);
+            var passBuf = EbcidicConverter.ToPadded(passEbcidic, 10);
             return PasswordEncryptDES.EncryptPassword(userBuf, passBuf, clientSeed, serverSeed);
         }
     }
