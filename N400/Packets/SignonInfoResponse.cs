@@ -26,7 +26,7 @@ namespace N400.Packets
         // [6]: 4363 // ** UNKNOWN: 8-byte buffer, possibly [u]long? long as a
         //                 password as well
         // [8]: 4394 // ** UNKNOWN: value 1, ushort
-        // [9]: 4395 // ** UNKNOWN: EBCIDIC strings, looks like structured data
+        // [9]: 4395 // ** UNKNOWN: EBCDIC strings, looks like structured data
         //                 that may possibly be a 5250 data stream (strings
         //                 seem to suggest it, anyways)
 
@@ -82,17 +82,17 @@ namespace N400.Packets
         {
             get
             {
-                var ebcidic = GetField(USERID);
-                if (ebcidic == null)
+                var ebcdic = GetField(USERID);
+                if (ebcdic == null)
                     return null;
                 else
-                    return EbcidicConverter.FromEbcidicToString(ebcidic);
+                    return EbcdicConverter.FromEbcidicToString(ebcdic);
             }
             set
             {
-                var ebcidic = EbcidicConverter.ToEbcidic(value);
+                var ebcdic = EbcdicConverter.ToEbcidic(value);
                 var userBuf = new byte[10].Select(x => (byte)0x40).ToArray();
-                Array.Copy(ebcidic, userBuf, Math.Min(ebcidic.Length, 10));
+                Array.Copy(ebcdic, userBuf, Math.Min(ebcdic.Length, 10));
                 SetField(userBuf, 137, USERID);
             }
         }

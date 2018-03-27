@@ -187,7 +187,7 @@ namespace N400.Services
             else if (res.RequestResponseID == DataQueueReadResponse.ID)
             {
                 var readRes = (DataQueueReadResponse)res;
-                var senderInfoString = EbcidicConverter.FromEbcidicToString(readRes.SenderInfo,
+                var senderInfoString = EbcdicConverter.FromEbcidicToString(readRes.SenderInfo,
                     Server.NLV);
                 var entry = new DataQueueEntry(readRes.Entry,
                     senderInfoString,

@@ -30,7 +30,7 @@ namespace N400.Packets
             get
             {
                 var asEbcidic = GetField(USERID);
-                return EbcidicConverter.FromEbcidicToString(asEbcidic);
+                return EbcdicConverter.FromEbcidicToString(asEbcidic);
             }
             set
             {
@@ -39,7 +39,7 @@ namespace N400.Packets
                 Data.WriteBE(offset + 4, USERID);
 
                 var buf = new byte[10].Select(x => (byte)0x40).ToArray();
-                var asEbcidic = EbcidicConverter.ToEbcidic(value);
+                var asEbcidic = EbcdicConverter.ToEbcidic(value);
                 Array.Copy(asEbcidic, 0, buf, 0, Math.Min(10, asEbcidic.Length));
                 Array.Copy(buf, 0, Data, offset + 6, 10);
             }

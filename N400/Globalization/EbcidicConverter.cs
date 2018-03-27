@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace N400.Globalization
 {
     /// <summary>
-    /// Contains utilities for converting to and from EBCIDIC text.
+    /// Contains utilities for converting to and from EBCDIC text.
     /// </summary>
-    public static class EbcidicConverter
+    public static class EbcdicConverter
     {
         // TODO: support other than NLV 2924? padding functions?
 
@@ -19,7 +19,7 @@ namespace N400.Globalization
         /// <param name="s">The byte array/string to pad</param>
         /// <param name="length">The length of the new buffer.</param>
         /// <param name="padWith">
-        /// The item to pad with. By default, a space in EBCIDIC.
+        /// The item to pad with. By default, a space in EBCDIC.
         /// </param>
         /// <returns>The original array/string, padded.</returns>
         public static byte[] ToPadded(byte[] s, int length, byte padWith = 0x40)
@@ -32,7 +32,7 @@ namespace N400.Globalization
         }
 
         /// <summary>
-        /// Converts a string from a source encoding to EBCIDIC.
+        /// Converts a string from a source encoding to EBCDIC.
         /// </summary>
         /// <param name="source">The string to convert.</param>
         /// <param name="nlv">
@@ -42,7 +42,7 @@ namespace N400.Globalization
         /// The encoding to convert from. If null, (by default) ASCII is
         /// assumed.
         /// </param>
-        /// <returns>The EBCIDIC string in a byte array.</returns>
+        /// <returns>The EBCDIC string in a byte array.</returns>
         public static byte[] ToEbcidic(string source, int nlv = 2924, Encoding sourceEncoding = null)
         {
             if (source == null)
@@ -56,7 +56,7 @@ namespace N400.Globalization
         }
 
         /// <summary>
-        /// Converts a byte array from a source encoding to EBCIDIC.
+        /// Converts a byte array from a source encoding to EBCDIC.
         /// </summary>
         /// <param name="source">The string to convert.</param>
         /// <param name="nlv">
@@ -66,7 +66,7 @@ namespace N400.Globalization
         /// The encoding to convert from. If null, (by default) ASCII is
         /// assumed.
         /// </param>
-        /// <returns>The EBCIDIC string in a byte array.</returns>
+        /// <returns>The EBCDIC string in a byte array.</returns>
         public static byte[] ToEbcidic(byte[] source, int nlv = 2924, Encoding sourceEncoding = null)
         {
             if (source == null)
@@ -74,14 +74,14 @@ namespace N400.Globalization
             if (nlv != 2924)
                 throw new NotImplementedException("Only NLV 2924 is supported.");
 
-            var ebcidic = Encoding.GetEncoding("IBM037");
+            var ebcdic = Encoding.GetEncoding("IBM037");
             sourceEncoding = sourceEncoding ?? Encoding.ASCII;
 
-            return Encoding.Convert(sourceEncoding, ebcidic, source);
+            return Encoding.Convert(sourceEncoding, ebcdic, source);
         }
 
         /// <summary>
-        /// Converts an EBCIDIC byte array to a byte array in a new encoding.
+        /// Converts an EBCDIC byte array to a byte array in a new encoding.
         /// </summary>
         /// <param name="source">The string to convert.</param>
         /// <param name="nlv">
@@ -98,14 +98,14 @@ namespace N400.Globalization
             if (nlv != 2924)
                 throw new NotImplementedException("Only NLV 2924 is supported.");
 
-            var ebcidic = Encoding.GetEncoding("IBM037");
+            var ebcdic = Encoding.GetEncoding("IBM037");
             destEncoding = destEncoding ?? Encoding.ASCII;
 
-            return Encoding.Convert(ebcidic, destEncoding, source);
+            return Encoding.Convert(ebcdic, destEncoding, source);
         }
 
         /// <summary>
-        /// Converts an EBCIDIC byte array to a string in a new encoding.
+        /// Converts an EBCDIC byte array to a string in a new encoding.
         /// </summary>
         /// <param name="source">The string to convert.</param>
         /// <param name="nlv">

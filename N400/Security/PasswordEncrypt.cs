@@ -49,7 +49,7 @@ namespace N400.Security
 
             // TODO: needs to be updated with EbcidicConverter
             // it needs to be big endian UTF-16 as an intermediate...?
-            var userBuf = Encoding.Convert(Encoding.GetEncoding("IBM037"), Encoding.BigEndianUnicode, EbcidicConverter.ToEbcidic(userId));
+            var userBuf = Encoding.Convert(Encoding.GetEncoding("IBM037"), Encoding.BigEndianUnicode, EbcdicConverter.ToEbcidic(userId));
             var passwordBuf = Encoding.Convert(Encoding.ASCII, Encoding.BigEndianUnicode, Encoding.ASCII.GetBytes(password));
             
             var passwordToken = sha1.ComputeHash(userBuf
@@ -71,11 +71,11 @@ namespace N400.Security
                 throw new ArgumentException("Password too long.", nameof(password));
 
             // all values are upper case
-            var userEbcidic = EbcidicConverter.ToEbcidic(userId.ToUpperInvariant());
-            var passEbcidic = EbcidicConverter.ToEbcidic(password.ToUpperInvariant());
+            var userEbcidic = EbcdicConverter.ToEbcidic(userId.ToUpperInvariant());
+            var passEbcidic = EbcdicConverter.ToEbcidic(password.ToUpperInvariant());
             // make fixed sized 0x40-filled buffers
-            var userBuf = EbcidicConverter.ToPadded(userEbcidic, 10);
-            var passBuf = EbcidicConverter.ToPadded(passEbcidic, 10);
+            var userBuf = EbcdicConverter.ToPadded(userEbcidic, 10);
+            var passBuf = EbcdicConverter.ToPadded(passEbcidic, 10);
             return PasswordEncryptDES.EncryptPassword(userBuf, passBuf, clientSeed, serverSeed);
         }
     }

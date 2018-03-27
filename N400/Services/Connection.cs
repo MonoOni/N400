@@ -26,7 +26,7 @@ namespace N400.Services
         /// </summary>
         public uint CorrelationId { get; private set; }
         /// <summary>
-        /// An EBCIDIC string containing the job name for the connection.
+        /// An EBCDIC string containing the job name for the connection.
         /// </summary>
         public byte[] Job { get; private set; }
 
@@ -43,7 +43,7 @@ namespace N400.Services
         /// The ID used to identify the conversation stream for the connection.
         /// </param>
         /// <param name="job">
-        /// An EBCIDIC string containing the job name for the connection.
+        /// An EBCDIC string containing the job name for the connection.
         /// </param>
         public Connection(Stream socket, Service service, uint correlationId, byte[] job)
         {

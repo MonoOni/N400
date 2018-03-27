@@ -60,11 +60,11 @@ namespace N400.DataQueues
 
             Name = name;
             Library = library;
-            var nameEbcidic = EbcidicConverter.ToPadded(
-                EbcidicConverter.ToEbcidic(name, Server.NLV),
+            var nameEbcidic = EbcdicConverter.ToPadded(
+                EbcdicConverter.ToEbcidic(name, Server.NLV),
                 10);
-            var libEbcidic = EbcidicConverter.ToPadded(
-                EbcidicConverter.ToEbcidic(library, Server.NLV),
+            var libEbcidic = EbcdicConverter.ToPadded(
+                EbcdicConverter.ToEbcidic(library, Server.NLV),
                 10);
 
             service = new DataQueueService(server);
@@ -106,8 +106,8 @@ namespace N400.DataQueues
                 throw new ArgumentException("The description is empty or too long.",
                     nameof(description));
 
-            var descEbcidic = EbcidicConverter.ToPadded(
-                EbcidicConverter.ToEbcidic(description, Server.NLV),
+            var descEbcidic = EbcdicConverter.ToPadded(
+                EbcdicConverter.ToEbcidic(description, Server.NLV),
                 50);
 
             service.Create(nameEbcidic,
