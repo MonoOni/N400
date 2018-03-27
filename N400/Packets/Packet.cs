@@ -172,7 +172,7 @@ namespace N400.Packets
         /// If the field couldn't be found, then null will be returned.
         /// </para>
         /// </returns>
-        public byte[] GetField(ushort id)
+        protected byte[] GetField(ushort id)
         {
             var offset = TemplateLength + 20;
             var prevOffset = offset;
@@ -194,7 +194,7 @@ namespace N400.Packets
             var start = offset + sizeof(int) + sizeof(short);
             return Data.Slice(start, length - 6);
         }
-        
+
         /// <summary>
         /// Sets the contents of a field.
         /// </summary>
@@ -204,7 +204,7 @@ namespace N400.Packets
         /// The ID of the field, used for addressing with
         /// <see cref="GetField(ushort)"/>.
         /// </param>
-        public void SetField(byte[] value, int offset, ushort id)
+        protected void SetField(byte[] value, int offset, ushort id)
         {
             Data.WriteBE(offset, value.Length + 6);
             Data.WriteBE(offset + sizeof(int), id);
@@ -220,7 +220,7 @@ namespace N400.Packets
         /// The ID of the field, used for addressing with
         /// <see cref="GetField(ushort)"/>.
         /// </param>
-        public void SetField(uint value, int offset, ushort id)
+        protected void SetField(uint value, int offset, ushort id)
         {
             Data.WriteBE(offset, sizeof(uint) + 6);
             Data.WriteBE(offset + sizeof(int), id);
@@ -236,7 +236,7 @@ namespace N400.Packets
         /// The ID of the field, used for addressing with
         /// <see cref="GetField(ushort)"/>.
         /// </param>
-        public void SetField(ushort value, int offset, ushort id)
+        protected void SetField(ushort value, int offset, ushort id)
         {
             Data.WriteBE(offset, sizeof(ushort) + 6);
             Data.WriteBE(offset + sizeof(int), id);
@@ -252,7 +252,7 @@ namespace N400.Packets
         /// The ID of the field, used for addressing with
         /// <see cref="GetField(ushort)"/>.
         /// </param>
-        public void SetField(DateTime value, int offset, ushort id)
+        protected void SetField(DateTime value, int offset, ushort id)
         {
             Data.WriteBE(offset, 8 + 6);
             Data.WriteBE(offset + sizeof(int), id);
