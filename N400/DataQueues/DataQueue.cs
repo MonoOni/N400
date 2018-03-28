@@ -35,7 +35,7 @@ namespace N400.DataQueues
     /// var entry = dtaq.Peek(0);
     /// Console.WriteLine(
     ///     EbcdicConverter.FromEbcdicToString(
-    ///         dqe?.Data?.ToString() ?? "no data"));
+    ///         dqe?.Data ?? "no data"));
     /// </code>
     /// </example>
     public class DataQueue
