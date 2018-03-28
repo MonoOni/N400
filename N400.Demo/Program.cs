@@ -17,12 +17,12 @@ namespace N400.Demo
             Console.Write("Password: ");
             var password = Console.ReadLine();
 
-            var s = new Server(hostname, username, password, portMapperMode: PortMapperMode.AlwaysUsePortMapper);
+            var s = new Server(hostname, username, password, false, portMapperMode: PortMapperMode.AlwaysUsePortMapper);
             s.Signon();
 
-            var dq = new DataQueues.DataQueue(s, "LANDO", "TESTQ");
+            var dq = new DataQueues.DataQueue(s, name: "TESTQ", library: "CALVIN");
             DataQueues.DataQueueEntry dqe = dq.Peek(0);
-            Console.WriteLine(dqe.Data.ToString());
+            Console.WriteLine(dqe?.Data?.ToString() ?? "no data");
 
 
             Console.ReadLine();

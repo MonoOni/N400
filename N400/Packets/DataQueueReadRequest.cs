@@ -7,34 +7,10 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class DataQueueReadRequest : Packet
+    internal class DataQueueReadRequest : DataQueueRequestBase
     {
         const ushort ID = 0x0002;
         const ushort KEY = 0x5002;
-
-        public byte[] Name
-        {
-            get
-            {
-                return Data.Slice(20, 10);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 20, Math.Min(value.Length, 10));
-            }
-        }
-
-        public byte[] Library
-        {
-            get
-            {
-                return Data.Slice(30, 10);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 30, Math.Min(value.Length, 10));
-            }
-        }
 
         // XXX: What is this?
         public ushort Search
@@ -96,14 +72,11 @@ namespace N400.Packets
         }
 
         public DataQueueReadRequest(byte[] name, byte[] library, int wait, bool peek, byte[] key)
-            : base(key == null ? 48 : 54 + key.Length)
+            : base(key == null ? 48 : 54 + key.Length, name, library)
         {
             TemplateLength = 28;
-            ServiceID = DataQueueService.SERVICE_ID;
             RequestResponseID = ID;
-
-            Name = name;
-            Library = library;
+            
             Wait = wait;
             Peek = peek;
             Key = key;

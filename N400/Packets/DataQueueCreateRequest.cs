@@ -8,33 +8,9 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class DataQueueCreateRequest : Packet
+    internal class DataQueueCreateRequest : DataQueueRequestBase
     {
         const ushort ID = 0x0003;
-
-        public byte[] Name
-        {
-            get
-            {
-                return Data.Slice(20, 10);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 20, Math.Min(value.Length, 10));
-            }
-        }
-
-        public byte[] Library
-        {
-            get
-            {
-                return Data.Slice(30, 10);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 30, Math.Min(value.Length, 10));
-            }
-        }
 
         public uint EntryLength
         {
@@ -128,14 +104,11 @@ namespace N400.Packets
             DataQueueAuthority authority,
             uint keyLength,
             bool forceStorage,
-            byte[] description) : base(100)
+            byte[] description) : base(100, name, library)
         {
             TemplateLength = 80;
-            ServiceID = DataQueueService.SERVICE_ID;
             RequestResponseID = ID;
-
-            Name = name;
-            Library = library;
+            
             Description = description;
             EntryLength = entryLength;
             Authority = authority;

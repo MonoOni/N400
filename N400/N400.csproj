@@ -50,6 +50,7 @@
     <Compile Include="Packets\DataQueueExchangeAttributesRequest.cs" />
     <Compile Include="Packets\DataQueueReadRequest.cs" />
     <Compile Include="Packets\DataQueueReadResponse.cs" />
+    <Compile Include="Packets\DataQueueRequestBase.cs" />
     <Compile Include="Packets\DataQueueReturnCodeResponse.cs" />
     <Compile Include="Packets\DataQueueWriteRequest.cs" />
     <Compile Include="Services\Connection.cs" />

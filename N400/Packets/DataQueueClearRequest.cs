@@ -7,34 +7,10 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class DataQueueClearRequest : Packet
+    internal class DataQueueClearRequest : DataQueueRequestBase
     {
         const ushort ID = 0x0006;
         const ushort KEY = 0x5002;
-
-        public byte[] Name
-        {
-            get
-            {
-                return Data.Slice(20, 10);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 20, Math.Min(value.Length, 10));
-            }
-        }
-
-        public byte[] Library
-        {
-            get
-            {
-                return Data.Slice(30, 10);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 30, Math.Min(value.Length, 10));
-            }
-        }
 
         public byte[] Key
         {
@@ -59,14 +35,10 @@ namespace N400.Packets
         }
 
         public DataQueueClearRequest(byte[] name, byte[] library, byte[] key)
-            : base(key == null ? 41 : 47 + key.Length)
+            : base(key == null ? 41 : 47 + key.Length, name, library)
         {
             TemplateLength = 21;
-            ServiceID = DataQueueService.SERVICE_ID;
             RequestResponseID = ID;
-
-            Name = name;
-            Library = library;
 
             if (key != null)
             Key = key;

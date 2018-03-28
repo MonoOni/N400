@@ -7,35 +7,11 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class DataQueueWriteRequest : Packet
+    internal class DataQueueWriteRequest : DataQueueRequestBase
     {
         public const ushort ID = 0x0005;
         const ushort ENTRY = 0x5001;
         const ushort KEY = 0x5002;
-
-        public byte[] Name
-        {
-            get
-            {
-                return Data.Slice(20, 10);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 20, Math.Min(value.Length, 10));
-            }
-        }
-
-        public byte[] Library
-        {
-            get
-            {
-                return Data.Slice(30, 10);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 30, Math.Min(value.Length, 10));
-            }
-        }
 
         public byte[] Entry
         {
@@ -74,14 +50,10 @@ namespace N400.Packets
         }
 
         public DataQueueWriteRequest(byte[] name, byte[] library, byte[] entry, byte[] key)
-            : base(key == null ? 48 + entry.Length : 54 + entry.Length + key.Length)
+            : base(key == null ? 48 + entry.Length : 54 + entry.Length + key.Length, name, library)
         {
             TemplateLength = 22;
-            ServiceID = DataQueueService.SERVICE_ID;
             RequestResponseID = ID;
-
-            Name = name;
-            Library = library;
 
             Entry = entry;
             Data[41] = 0xF1; // we want a reply
