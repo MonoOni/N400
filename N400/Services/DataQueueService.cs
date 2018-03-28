@@ -40,7 +40,7 @@ namespace N400.Services
                 // DataQueueReturnCodeResponse
                 else if (res.RequestResponseID == DataQueueReturnCodeResponse.ID)
                 {
-                    var rcRes = (DataQueueReturnCodeResponse)res;
+                    var rcRes = new DataQueueReturnCodeResponse(res.Data);
                     throw new Exception(
                         "An error occured when exchanging attributes with the data queue service: " +
                         $"{rcRes.ReturnCode}");
@@ -89,7 +89,7 @@ namespace N400.Services
                 throw new Exception($"Invalid data queue create response ID {res.RequestResponseID}");
             else
             {
-                var rcRes = (DataQueueReturnCodeResponse)res;
+                var rcRes = new DataQueueReturnCodeResponse(res.Data);
                 if (rcRes.ReturnCode != 0xF000)
                     throw new Exception(
                         "An error occured when creating a queue with the data queue service: " +
@@ -111,7 +111,7 @@ namespace N400.Services
                 throw new Exception($"Invalid data queue delete response ID {res.RequestResponseID}");
             else
             {
-                var rcRes = (DataQueueReturnCodeResponse)res;
+                var rcRes = new DataQueueReturnCodeResponse(res.Data);
                 if (rcRes.ReturnCode != 0xF000)
                     throw new Exception(
                         "An error occured when deleting a queue on the data queue service: " +
@@ -133,7 +133,7 @@ namespace N400.Services
                 throw new Exception($"Invalid data queue clear response ID {res.RequestResponseID}");
             else
             {
-                var rcRes = (DataQueueReturnCodeResponse)res;
+                var rcRes = new DataQueueReturnCodeResponse(res.Data);
                 if (rcRes.ReturnCode != 0xF000)
                     throw new Exception(
                         "An error occured when clearing a queue on the data queue service: " +
@@ -155,7 +155,7 @@ namespace N400.Services
                 throw new Exception($"Invalid data queue write response ID {res.RequestResponseID}");
             else
             {
-                var rcRes = (DataQueueReturnCodeResponse)res;
+                var rcRes = new DataQueueReturnCodeResponse(res.Data);
                 if (rcRes.ReturnCode != 0xF000)
                     throw new Exception(
                         "An error occured when writing to a queue on the data queue service: " +
@@ -176,7 +176,7 @@ namespace N400.Services
                 throw new Exception("Invalid packet length.");
             else if (res.RequestResponseID == DataQueueReturnCodeResponse.ID)
             {
-                var rcRes = (DataQueueReturnCodeResponse)res;
+                var rcRes = new DataQueueReturnCodeResponse(res.Data);
                 if (rcRes.ReturnCode != 0xF006)
                     throw new Exception(
                         "An error occured when reading from a queue on the data queue service: " +
@@ -186,7 +186,7 @@ namespace N400.Services
             }
             else if (res.RequestResponseID == DataQueueReadResponse.ID)
             {
-                var readRes = (DataQueueReadResponse)res;
+                var readRes = new DataQueueReadResponse(res.Data);
                 var senderInfoString = EbcdicConverter.FromEbcidicToString(readRes.SenderInfo,
                     Server.NLV);
                 var entry = new DataQueueEntry(readRes.Entry,
