@@ -16,8 +16,10 @@ namespace N400.Demo
             var username = Console.ReadLine();
             Console.Write("Password: ");
             var password = Console.ReadLine();
+            Console.Write("TLS? ");
+            var tls = Console.ReadLine().ToLower().StartsWith("y");
 
-            var s = new Server(hostname, username, password, false, portMapperMode: PortMapperMode.AlwaysUsePortMapper);
+            var s = new Server(hostname, username, password, tls, portMapperMode: PortMapperMode.AlwaysUsePortMapper);
             s.Signon();
 
             var dq = new DataQueues.DataQueue(s, name: "TESTQ", library: "CALVIN");
