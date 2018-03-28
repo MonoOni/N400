@@ -20,8 +20,10 @@ namespace N400.Demo
             var s = new Server(hostname, username, password, portMapperMode: PortMapperMode.AlwaysUsePortMapper);
             s.Signon();
 
-            var dq = new DataQueues.DataQueue(s, "CALVIN", "TESTQ");
-            dq.Create(8);
+            var dq = new DataQueues.DataQueue(s, "LANDO", "TESTQ");
+            DataQueues.DataQueueEntry dqe = dq.Peek(0);
+            Console.WriteLine(dqe.Data.ToString());
+
 
             Console.ReadLine();
         }
