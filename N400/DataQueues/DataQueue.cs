@@ -15,7 +15,7 @@ namespace N400.DataQueues
     {
         DataQueueService service;
 
-        byte[] nameEbcidic, libraryEbcidic;
+        byte[] nameEbcdic, libraryEbcdic;
 
         /// <summary>
         /// The servers to access data queues on.
@@ -60,10 +60,10 @@ namespace N400.DataQueues
 
             Name = name;
             Library = library;
-            var nameEbcidic = EbcdicConverter.ToPadded(
+            nameEbcdic = EbcdicConverter.ToPadded(
                 EbcdicConverter.ToEbcidic(name, Server.NLV),
                 10);
-            var libEbcidic = EbcdicConverter.ToPadded(
+            libraryEbcdic = EbcdicConverter.ToPadded(
                 EbcdicConverter.ToEbcidic(library, Server.NLV),
                 10);
 
@@ -110,8 +110,8 @@ namespace N400.DataQueues
                 EbcdicConverter.ToEbcidic(description, Server.NLV),
                 50);
 
-            service.Create(nameEbcidic,
-                libraryEbcidic,
+            service.Create(nameEbcdic,
+                libraryEbcdic,
                 entryLength,
                 saveSenderInfo,
                 fifo,
@@ -126,7 +126,7 @@ namespace N400.DataQueues
         /// </summary>
         public void Delete()
         {
-            service.Delete(nameEbcidic, libraryEbcidic);
+            service.Delete(nameEbcdic, libraryEbcdic);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace N400.DataQueues
         /// <param name="key">The key to use.</param>
         public void Clear(byte[] key = null)
         {
-            service.Clear(nameEbcidic, libraryEbcidic, key);
+            service.Clear(nameEbcdic, libraryEbcdic, key);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace N400.DataQueues
         /// <param name="key">The key to use.</param>
         public void Write(byte[] entry, byte[] key = null)
         {
-            service.Write(nameEbcidic, libraryEbcidic, entry, key);
+            service.Write(nameEbcdic, libraryEbcdic, entry, key);
         }
         
         // TODO: i'm pretty sure wait is supposed to be a signed int
@@ -157,7 +157,7 @@ namespace N400.DataQueues
         /// <returns>The queued item.</returns>
         public DataQueueEntry Read(int wait)
         {
-            return service.Read(nameEbcidic, libraryEbcidic, 0, wait, false, null);
+            return service.Read(nameEbcdic, libraryEbcdic, 0, wait, false, null);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace N400.DataQueues
         /// <returns>The queued item.</returns>
         public DataQueueEntry Peek(int wait)
         {
-            return service.Read(nameEbcidic, libraryEbcidic, 0, wait, true, null);
+            return service.Read(nameEbcdic, libraryEbcdic, 0, wait, true, null);
         }
     }
 }
