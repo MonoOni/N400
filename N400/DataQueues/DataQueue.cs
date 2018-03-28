@@ -11,6 +11,31 @@ namespace N400.DataQueues
     /// <summary>
     /// Represents access to data queues on a server.
     /// </summary>
+    /// <example>
+    /// This command can be used to create data queue entries:
+    /// <code>
+    /// CRTDTAQ DTAQ(LANDO/TESTQ) MAXLEN(256)
+    /// </code>
+    /// This CL program can then be used to push entries onto the queue:
+    /// <code>
+    /// PGM                                                    
+    /// DCL VAR(&DQNAME) TYPE(*CHAR) LEN(10) VALUE('TESTQ')
+    /// DCL VAR(&DQLIB) TYPE(*CHAR) LEN(10) VALUE('LANDO')
+    /// DCL VAR(&DQSNDLEN) TYPE(*DEC) LEN(5 0) VALUE(14)
+    /// DCL VAR(&DQLEN) TYPE(*DEC) LEN(5 0)
+    /// DCL VAR(&DQSNDDATA) TYPE(*CHAR) LEN(100)
+    /// CHGVAR VAR(&DQSNDDATA) VALUE('THIS IS A TEST')
+    /// CALL QSNDDTAQ PARM(&DQNAME &DQLIB &DQSNDLEN &DQSNDDATA)
+    /// ENDPGM
+    /// </code>
+    /// This C# excerpt can then be used to read items from the queue, and then
+    /// write them to the console:
+    /// <code>
+    /// var dtaq = new DataQueue(server, "LANDO", "TESTQ");
+    /// var entry = dtaq.Peek(0);
+    /// Console.WriteLine(EbcdicConverter.FromEbcdicToString(entry.Data));
+    /// </code>
+    /// </example>
     public class DataQueue
     {
         DataQueueService service;
