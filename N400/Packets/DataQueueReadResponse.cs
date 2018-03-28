@@ -10,8 +10,8 @@ namespace N400.Packets
     internal class DataQueueReadResponse : Packet
     {
         public const ushort ID = 0x8003;
-        const ushort ENTRY = 0x5002;
-        const ushort KEY = 0x5003;
+        const ushort ENTRY = 0x5001;
+        const ushort KEY = 0x5002;
 
         public byte[] SenderInfo
         {
