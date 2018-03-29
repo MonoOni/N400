@@ -33,9 +33,7 @@ namespace N400.DataQueues
     /// <code>
     /// var dtaq = new DataQueue(server, name: "TESTQ", library: "LANDO");
     /// var entry = dtaq.Peek(0);
-    /// Console.WriteLine(
-    ///     EbcdicConverter.FromEbcdicToString(
-    ///         dqe?.Data ?? "no data"));
+    /// Console.WriteLine(dqe?.Data ?? "no data");
     /// </code>
     /// </example>
     public class DataQueue
