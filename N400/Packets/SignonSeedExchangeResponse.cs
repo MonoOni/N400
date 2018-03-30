@@ -17,17 +17,30 @@ namespace N400.Packets
         const ushort PASSWORD_LEVEL = 0x1119;
         const ushort JOB_NAME = 0x111F;
 
-        public uint ServerVersion
+        // a version looks like:       0x00050100
+        //                                ^ ^ ^ ^
+        // [0] unknown, maybe [1] ushort -/ | | |
+        // [1] major -----------------------/ | |
+        // [2] minor -------------------------/ |
+        // [4] unknown -------------------------/
+        //
+        // the i systems I've seen give 0x00070100 or 0x00070200
+        public Version ServerVersion
         {
             get
             {
-                return GetField(SERVER_VERSION).ReadUInt32BE();
+                var bytes = GetField(SERVER_VERSION);
+                var ver = new Version(bytes[1], bytes[2]);
+                return ver;
             }
             set
             {
                 Data.WriteBE(24, 10);
                 Data.WriteBE(28, SERVER_VERSION);
-                Data.WriteBE(30, value);
+                Data[31] = 0;
+                Data[31] = (byte)value.Major;
+                Data[32] = (byte)value.Minor;
+                Data[33] = 0;
             }
         }
 

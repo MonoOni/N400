@@ -64,6 +64,11 @@ namespace N400
         /// </summary>
         public byte PasswordLevel { get; private set; }
 
+        /// <summary>
+        /// The version of i on the server.
+        /// </summary>
+        public Version ServerVersion { get; private set; }
+
         PortMapper pm;
 
         /// <summary>
@@ -203,6 +208,7 @@ namespace N400
             // TODO: Add more information; perhaps just store the signon packet directly?
             ServerCCSID = response.SignonInfoResponse.ServerCCSID;
             PasswordLevel = response.SignonSeedExchangeResponse.PasswordLevel;
+            ServerVersion = response.SignonSeedExchangeResponse.ServerVersion;
 
             ss.Disconnect();
             SignedOn = true;
