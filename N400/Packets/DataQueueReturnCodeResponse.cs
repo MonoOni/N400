@@ -11,17 +11,7 @@ namespace N400.Packets
         public const ushort ID = 0x8002;
 
         // this is a ushort, so we can't inherit from ResponsePacket
-        public ushort ReturnCode
-        {
-            get
-            {
-                return Data.ReadUInt16BE(20);
-            }
-            set
-            {
-                Data.WriteBE(20, value);
-            }
-        }
+        public ushort ReturnCode => Data.ReadUInt16BE(20);
 
         public byte[] Message
         {
@@ -32,10 +22,6 @@ namespace N400.Packets
                     return GetFields().SingleOrDefault().Value;
                 }
                 else return null;
-            }
-            set
-            {
-                throw new NotImplementedException();
             }
         }
 

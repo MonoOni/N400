@@ -13,17 +13,7 @@ namespace N400.Packets
         const ushort USERID = 0x1104;
         const ushort JOB_NAME = 0x111F;
 
-        public byte[] JobName
-        {
-            get
-            {
-                return GetField(JOB_NAME);
-            }
-            set
-            {
-                SetField(value, 40, JOB_NAME);
-            }
-        }
+        public byte[] JobName => GetField(JOB_NAME);
 
         public string UserID
         {
@@ -31,17 +21,6 @@ namespace N400.Packets
             {
                 var asEbcidic = GetField(USERID);
                 return EbcdicConverter.FromEbcidicToString(asEbcidic);
-            }
-            set
-            {
-                var offset = 24;
-                Data.WriteBE(offset, 16);
-                Data.WriteBE(offset + 4, USERID);
-
-                var buf = new byte[10].Select(x => (byte)0x40).ToArray();
-                var asEbcidic = EbcdicConverter.ToEbcidic(value);
-                Array.Copy(asEbcidic, 0, buf, 0, Math.Min(10, asEbcidic.Length));
-                Array.Copy(buf, 0, Data, offset + 6, 10);
             }
         }
 

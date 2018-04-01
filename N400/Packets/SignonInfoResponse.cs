@@ -30,53 +30,13 @@ namespace N400.Packets
         //                 that may possibly be a 5250 data stream (strings
         //                 seem to suggest it, anyways)
 
-        public DateTime CurrentSignonDate
-        {
-            get
-            {
-                return GetField(CURRENT_SIGNON_DATE).ReadDateTime();
-            }
-            set
-            {
-                SetField(value, 24, CURRENT_SIGNON_DATE);
-            }
-        }
+        public DateTime CurrentSignonDate => GetField(CURRENT_SIGNON_DATE).ReadDateTime();
 
-        public DateTime LastSignonDate
-        {
-            get
-            {
-                return GetField(LAST_SIGNON_DATE).ReadDateTime();
-            }
-            set
-            {
-                SetField(value, 38, LAST_SIGNON_DATE);
-            }
-        }
+        public DateTime LastSignonDate => GetField(LAST_SIGNON_DATE).ReadDateTime();
 
-        public uint ServerCCSID
-        {
-            get
-            {
-                return GetField(SERVER_CCSID).ReadUInt32BE();
-            }
-            set
-            {
-                SetField(value, 99, SERVER_CCSID);
-            }
-        }
+        public uint ServerCCSID => GetField(SERVER_CCSID).ReadUInt32BE();
 
-        public uint ExpirationWarning
-        {
-            get
-            {
-                return GetField(EXPIRATION_WARNING).ReadUInt32BE();
-            }
-            set
-            {
-                SetField(value, 75, EXPIRATION_WARNING);
-            }
-        }
+        public uint ExpirationWarning => GetField(EXPIRATION_WARNING).ReadUInt32BE();
 
         public string UserID
         {
@@ -88,13 +48,6 @@ namespace N400.Packets
                 else
                     return EbcdicConverter.FromEbcidicToString(ebcdic);
             }
-            set
-            {
-                var ebcdic = EbcdicConverter.ToEbcidic(value);
-                var userBuf = new byte[10].Select(x => (byte)0x40).ToArray();
-                Array.Copy(ebcdic, userBuf, Math.Min(ebcdic.Length, 10));
-                SetField(userBuf, 137, USERID);
-            }
         }
 
         public DateTime? PasswordExpirationDate
@@ -103,11 +56,6 @@ namespace N400.Packets
             {
                 var field = GetField(PASSWORD_EXPIRATION_DATE);
                 return field?.ReadDateTime();
-            }
-            set
-            {
-                if (value.HasValue)
-                    SetField(value.Value, 117, PASSWORD_EXPIRATION_DATE);
             }
         }
 

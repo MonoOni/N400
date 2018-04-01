@@ -10,207 +10,43 @@ namespace N400.Packets
     {
         public const ushort ID = 0x8005;
 
-        public DateTime CreationDate
-        {
-            get
-            {
-                return Data.ReadDateTimeIfs(22);
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public DateTime CreationDate => Data.ReadDateTimeIfs(22);
 
-        public DateTime ModificationDate
-        {
-            get
-            {
-                return Data.ReadDateTimeIfs(30);
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public DateTime ModificationDate => Data.ReadDateTimeIfs(30);
 
-        public DateTime AccessDate
-        {
-            get
-            {
-                return Data.ReadDateTimeIfs(38);
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public DateTime AccessDate => Data.ReadDateTimeIfs(38);
 
-        public uint FixedAttributes
-        {
-            get
-            {
-                return Data.ReadUInt32BE(50);
-            }
-            set
-            {
-                Data.WriteBE(50, value);
-            }
-        }
+        // file size uint at 46, but obsoleted by the ulong version
 
-        public ushort ObjectType
-        {
-            get
-            {
-                return Data.ReadUInt16BE(54);
-            }
-            set
-            {
-                Data.WriteBE(54, value);
-            }
-        }
+        public uint FixedAttributes => Data.ReadUInt32BE(50);
 
-        public ushort ExtendedAttributesCount
-        {
-            get
-            {
-                return Data.ReadUInt16BE(56);
-            }
-            set
-            {
-                Data.WriteBE(56, value);
-            }
-        }
+        public ushort ObjectType => Data.ReadUInt16BE(54);
 
-        public uint ExtendedAttributeNamesBytes
-        {
-            get
-            {
-                return Data.ReadUInt32BE(58);
-            }
-            set
-            {
-                Data.WriteBE(58, value);
-            }
-        }
+        public ushort ExtendedAttributesCount => Data.ReadUInt16BE(56);
 
-        public uint ExtendedAttributeValuesBytes
-        {
-            get
-            {
-                return Data.ReadUInt32BE(62);
-            }
-            set
-            {
-                Data.WriteBE(62, value);
-            }
-        }
+        public uint ExtendedAttributeNamesBytes => Data.ReadUInt32BE(58);
 
-        public uint Version
-        {
-            get
-            {
-                return Data.ReadUInt32BE(66);
-            }
-            set
-            {
-                Data.WriteBE(66, value);
-            }
-        }
+        public uint ExtendedAttributeValuesBytes => Data.ReadUInt32BE(62);
 
-        public ushort AmountAccessed
-        {
-            get
-            {
-                return Data.ReadUInt16BE(70);
-            }
-            set
-            {
-                Data.WriteBE(70, value);
-            }
-        }
+        public uint Version => Data.ReadUInt32BE(66);
 
-        public byte AccessHistory
-        {
-            get
-            {
-                return Data[72];
-            }
-            set
-            {
-                Data[72] = value;
-            }
-        }
+        public ushort AmountAccessed => Data.ReadUInt16BE(70);
 
-        public ushort FileCCSID
-        {
-            get
-            {
-                return Data.ReadUInt16BE(73);
-            }
-            set
-            {
-                Data.WriteBE(73, value);
-            }
-        }
+        public byte AccessHistory => Data[72];
 
-        public ushort CheckoutCCSID
-        {
-            get
-            {
-                return Data.ReadUInt16BE(75);
-            }
-            set
-            {
-                Data.WriteBE(75, value);
-            }
-        }
+        public ushort FileCCSID => Data.ReadUInt16BE(73);
 
-        public uint RestartID
-        {
-            get
-            {
-                return Data.ReadUInt32BE(88);
-            }
-            set
-            {
-                Data.WriteBE(88, value);
-            }
-        }
+        public ushort CheckoutCCSID => Data.ReadUInt16BE(75);
 
-        public ulong FileSize
-        {
-            get
-            {
-                return Data.ReadUInt64BE(81);
-            }
-            set
-            {
-                Data.WriteBE(81, value);
-            }
-        }
+        public uint RestartID => Data.ReadUInt32BE(88);
+
+        public ulong FileSize => Data.ReadUInt64BE(81);
 
         // mystery meat ushort at 89
 
-        public bool Symlink
-        {
-            get
-            {
-                return Data[91] == 1;
-            }
-            set
-            {
-                Data[91] = (byte)(value ? 1 : 0);
-            }
-        }
+        public bool Symlink => Data[91] == 1;
 
-        public byte[] FileName
-        {
-            get
-            {
-                return GetField(0x0002);
-            }
-        }
+        public byte[] FileName => GetField(0x0002);
 
         public IfsListAttributeResponse(byte[] data)
             : base(data)

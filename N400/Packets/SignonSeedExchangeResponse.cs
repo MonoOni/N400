@@ -33,58 +33,13 @@ namespace N400.Packets
                 var ver = new Version(bytes[1], bytes[2]);
                 return ver;
             }
-            set
-            {
-                Data.WriteBE(24, 10);
-                Data.WriteBE(28, SERVER_VERSION);
-                Data[31] = 0;
-                Data[31] = (byte)value.Major;
-                Data[32] = (byte)value.Minor;
-                Data[33] = 0;
-            }
         }
 
-        public ushort ServerLevel
-        {
-            get
-            {
-                return GetField(SERVER_LEVEL).ReadUInt16BE();
-            }
-            set
-            {
-                Data.WriteBE(34, 8);
-                Data.WriteBE(38, SERVER_LEVEL);
-                Data.WriteBE(40, value);
-            }
-        }
+        public ushort ServerLevel => GetField(SERVER_LEVEL).ReadUInt16BE();
 
-        public byte[] ServerSeed
-        {
-            get
-            {
-                return GetField(SERVER_SEED);
-            }
-            set
-            {
-                Data.WriteBE(42, 14);
-                Data.WriteBE(46, SERVER_SEED);
-                Array.Copy(value, 0, Data, 48, 8);
-            }
-        }
+        public byte[] ServerSeed => GetField(SERVER_SEED);
 
-        public byte PasswordLevel
-        {
-            get
-            {
-                return GetField(PASSWORD_LEVEL)[0];
-            }
-            set
-            {
-                Data.WriteBE(56, 7);
-                Data.WriteBE(60, PASSWORD_LEVEL);
-                Data[62] = value;
-            }
-        }
+        public byte PasswordLevel => GetField(PASSWORD_LEVEL)[0];
 
         public string JobName
         {
@@ -92,13 +47,6 @@ namespace N400.Packets
             {
                 var a = GetField(JOB_NAME).TakeWhile(x => x != 0).ToArray();
                 return Encoding.Default.GetString(a);
-            }
-            set
-            {
-                Data.WriteBE(63, 0x1F);
-                Data.WriteBE(67, JOB_NAME);
-                var b = Encoding.Default.GetBytes(value);
-                Array.Copy(b, 0, Data, 69, Math.Min(b.Length, 25));
             }
         }
 

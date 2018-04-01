@@ -10,17 +10,7 @@ namespace N400.Packets
     {
         const ushort ID = 0xF001;
 
-        public byte[] Seed
-        {
-            get
-            {
-                return Data.Slice(24, 8);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 24, Math.Min(value.Length, 8));
-            }
-        }
+        public byte[] Seed => Data.Slice(24, 8);
 
         public RandomSeedExchangeResponse(byte[] data) : base(data)
         {

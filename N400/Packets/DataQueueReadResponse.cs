@@ -13,41 +13,11 @@ namespace N400.Packets
         const ushort ENTRY = 0x5001;
         const ushort KEY = 0x5002;
 
-        public byte[] SenderInfo
-        {
-            get
-            {
-                return Data.Slice(22, 30);
-            }
-            set
-            {
-                Array.Copy(value, 0, Data, 22, Math.Min(value.Length, 30));
-            }
-        }
+        public byte[] SenderInfo => Data.Slice(22, 30);
 
-        public byte[] Entry
-        {
-            get
-            {
-                return GetField(ENTRY);
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public byte[] Entry => GetField(ENTRY);
 
-        public byte[] Key
-        {
-            get
-            {
-                return GetField(KEY);
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public byte[] Key => GetField(KEY);
 
         public DataQueueReadResponse() : base(58)
         {
