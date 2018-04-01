@@ -58,9 +58,18 @@ namespace N400.Services
             }
         }
 
-        public IEnumerable<string> ListFiles(string path)
+        public IEnumerable<string> List(string path)
         {
             var pathBytes = Encoding.BigEndianUnicode.GetBytes(path);
+
+            var listReq = new IfsListAttributesRequest(pathBytes);
+            WritePacket(listReq);
+
+            ushort chain = 1;
+            while (chain != 0)
+            {
+                var listResBoxed = ReadPacket<Packet>();
+            }
 
             throw new NotImplementedException();
         }

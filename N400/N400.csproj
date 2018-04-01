@@ -56,6 +56,7 @@
     <Compile Include="Packets\DataQueueWriteRequest.cs" />
     <Compile Include="Packets\IfsExchangeAttributesRequest.cs" />
     <Compile Include="Packets\IfsExchangeAttributesResponse.cs" />
+    <Compile Include="Packets\IfsListAttributesRequest.cs" />
     <Compile Include="Services\Connection.cs" />
     <Compile Include="Globalization\EbcidicConverter.cs" />
     <Compile Include="Globalization\LocaleMapping.cs" />

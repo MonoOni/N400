@@ -22,10 +22,12 @@ namespace N400.Demo
             var s = new Server(hostname, username, password, tls, portMapperMode: PortMapperMode.AlwaysUsePortMapper);
             s.Signon();
 
-            var dq = new DataQueues.DataQueue(s, name: "TESTQ", library: "CALVIN");
-            DataQueues.DataQueueEntry dqe = dq.Peek(0);
-            Console.WriteLine(dqe?.Data?.ToString() ?? "no data");
+            //var dq = new DataQueues.DataQueue(s, name: "TESTQ", library: "CALVIN");
+            //DataQueues.DataQueueEntry dqe = dq.Peek(0);
+            //Console.WriteLine(dqe?.Data?.ToString() ?? "no data");
 
+            var fs = new FileSystem.FileSystem(s);
+            fs.List("/home/CALVIN");
 
             Console.ReadLine();
         }
