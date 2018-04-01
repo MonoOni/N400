@@ -279,6 +279,8 @@ namespace N400
             return dt;
         }
 
+        static readonly DateTime UNIX_EPOCH = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
         /// <summary>
         /// Reads 8 bytes and returns a UTC timestamp.
         /// </summary>
@@ -294,8 +296,7 @@ namespace N400
             var museconds = ba.ReadUInt32BE(offset + 4);
             var milliseconds = (seconds * 1000L) + (museconds / 1000);
 
-            var dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                .AddMilliseconds(milliseconds);
+            var dt = UNIX_EPOCH.AddMilliseconds(milliseconds);
             return dt;
         }
     }
