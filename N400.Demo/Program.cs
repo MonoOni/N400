@@ -27,7 +27,12 @@ namespace N400.Demo
             //Console.WriteLine(dqe?.Data?.ToString() ?? "no data");
 
             var fs = new FileSystem.FileSystem(s);
-            fs.List("/home/CALVIN");
+            var files = fs.List("/home/CALVIN/*");
+
+            foreach (var file in files)
+            {
+                Console.WriteLine(file);
+            }
 
             Console.ReadLine();
         }

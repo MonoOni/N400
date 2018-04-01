@@ -35,9 +35,9 @@ namespace N400.FileSystem
             service = new Services.IfsService(server);
         }
 
-        public List(string path)
+        public IEnumerable<string> List(string path)
         {
-            service.List(path);
+            return service.List(path);
         }
     }
 }

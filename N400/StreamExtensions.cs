@@ -167,12 +167,12 @@ namespace N400
         }
 
         /// <summary>
-        /// Reads 4 bytes in big endian and returns an usigned 32-bit integer.
+        /// Reads 4 bytes in big endian and returns an unsigned 32-bit integer.
         /// </summary>
         /// <param name="br">
         /// A <see cref="BinaryReader"/> that has a int in big endian to read.
         /// </param>
-        /// <returns>An usigned 32-bit integer.</returns>
+        /// <returns>An unsigned 32-bit integer.</returns>
         public static uint ReadUInt32BE(this BinaryReader br)
         {
             var b = br.ReadBytes(4);
@@ -182,13 +182,13 @@ namespace N400
         }
 
         /// <summary>
-        /// Reads 4 bytes in big endian and returns a signed 32-bit integer.
+        /// Reads 4 bytes in big endian and returns an unsigned 32-bit integer.
         /// </summary>
         /// <param name="ba">
         /// A byte array that has a int in big endian to read.
         /// </param>
         /// <param name="offset">The position of the data.</param>
-        /// <returns>A signed 32-bit integer.</returns>
+        /// <returns>An unsigned 32-bit integer.</returns>
         public static uint ReadUInt32BE(this byte[] ba, int offset = 0)
         {
             var b = new byte[4];
@@ -205,6 +205,52 @@ namespace N400
         /// <param name="offset">The starting position to write to.</param>
         /// <param name="value">The unsigned 32-bit integer to write.</param>
         public static void WriteBE(this byte[] ba, int offset, uint value)
+        {
+            var b = BitConverter.GetBytes(value);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(b);
+            Array.Copy(b, 0, ba, offset, b.Length);
+        }
+
+        /// <summary>
+        /// Reads 8 bytes in big endian and returns an unsigned 64-bit integer.
+        /// </summary>
+        /// <param name="br">
+        /// A <see cref="BinaryReader"/> that has a ulong in big endian to read.
+        /// </param>
+        /// <returns>An unsigned 64-bit integer.</returns>
+        public static ulong ReadUInt64BE(this BinaryReader br)
+        {
+            var b = br.ReadBytes(4);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(b);
+            return BitConverter.ToUInt64(b, 0);
+        }
+
+        /// <summary>
+        /// Reads 8 bytes in big endian and returns a signed 64-bit integer.
+        /// </summary>
+        /// <param name="ba">
+        /// A byte array that has a ulong in big endian to read.
+        /// </param>
+        /// <param name="offset">The position of the data.</param>
+        /// <returns>An unsigned 64-bit integer.</returns>
+        public static ulong ReadUInt64BE(this byte[] ba, int offset = 0)
+        {
+            var b = new byte[4];
+            Array.Copy(ba, offset, b, 0, 4);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(b);
+            return BitConverter.ToUInt64(b, 0);
+        }
+
+        /// <summary>
+        /// Writes a value to an array in big endian.
+        /// </summary>
+        /// <param name="ba">The array to write to.</param>
+        /// <param name="offset">The starting position to write to.</param>
+        /// <param name="value">The unsigned 64-bit integer to write.</param>
+        public static void WriteBE(this byte[] ba, int offset, ulong value)
         {
             var b = BitConverter.GetBytes(value);
             if (BitConverter.IsLittleEndian)
@@ -230,6 +276,26 @@ namespace N400
             var minute = ba[5 + offset];
             var second = ba[6 + offset];
             var dt = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Unspecified);
+            return dt;
+        }
+
+        /// <summary>
+        /// Reads 8 bytes and returns a timestamp.
+        /// </summary>
+        /// <param name="ba">
+        /// A byte array that has a DateTime in IFS serialization format to
+        /// read.
+        /// </param>
+        /// <param name="offset">The position of the data.</param>
+        /// <returns>A timestamp.</returns>
+        public static DateTime ReadDateTimeIfs(this byte[] ba, int offset = 0)
+        {
+            var seconds = ba.ReadInt32BE();
+            var museconds = ba.ReadInt32BE(4);
+            var milliseconds = (seconds * 1000L) + (museconds / 1000);
+
+            var dt = new DateTime();;
+            dt.AddMilliseconds(milliseconds);
             return dt;
         }
     }

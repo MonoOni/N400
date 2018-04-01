@@ -9,6 +9,11 @@ namespace N400.Services
 {
     internal class IfsService : Service
     {
+        const ushort FILE_NOT_FOUND = 2;
+        const ushort PATH_NOT_FOUND = 3;
+        const ushort ACCESS_DENIED = 13;
+        const ushort NO_MORE_FILES = 18;
+
         public const ushort SERVICE_ID = 0xE002;
 
         bool attributesExchanged;
@@ -60,6 +65,8 @@ namespace N400.Services
 
         public IEnumerable<string> List(string path)
         {
+            EnsureInitialized();
+
             var pathBytes = Encoding.BigEndianUnicode.GetBytes(path);
 
             var listReq = new IfsListAttributesRequest(pathBytes);
@@ -69,9 +76,31 @@ namespace N400.Services
             while (chain != 0)
             {
                 var listResBoxed = ReadPacket<Packet>();
-            }
 
-            throw new NotImplementedException();
+                if (listResBoxed.RequestResponseID == IfsReturnCodeResponse.ID)
+                {
+                    var infoRes = new IfsReturnCodeResponse(listResBoxed.Data);
+                    chain = infoRes.Chain;
+                    switch (infoRes.ReturnCode)
+                    {
+                        case NO_MORE_FILES:
+                            goto end;
+                        default:
+                            throw new Exception($"The file service returned an error: {infoRes.ReturnCode}");
+                    }
+                }
+                else if (listResBoxed.RequestResponseID == 0x8005)
+                {
+                    var infoRes = new IfsListAttributeResponse(listResBoxed.Data);
+                    chain = infoRes.Chain;
+                    var nameString = Encoding.BigEndianUnicode.GetString(infoRes.FileName);
+                    yield return nameString;
+                }
+                else
+                    throw new Exception($"The file service returned an unknown packet ID: {listResBoxed.RequestResponseID}");
+            }
+            end:
+            ;
         }
     }
 }
