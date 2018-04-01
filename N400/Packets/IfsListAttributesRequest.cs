@@ -7,21 +7,9 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class IfsListAttributesRequest : Packet
+    internal class IfsListAttributesRequest : IfsChainedPacketBase
     {
         const ushort ID = 0x000A;
-
-        public ushort Chain
-        {
-            get
-            {
-                return Data.ReadUInt16BE(20);
-            }
-            set
-            {
-                Data.WriteBE(20, value);
-            }
-        }
 
         public uint FileHandle
         {
@@ -125,7 +113,6 @@ namespace N400.Packets
             : base(46 + pathBytes.Length)
         {
             TemplateLength = 20;
-            ServiceID = IfsService.SERVICE_ID;
             RequestResponseID = ID;
 
             Chain = 0;

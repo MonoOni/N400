@@ -6,21 +6,9 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class IfsListAttributeResponse : Packet
+    internal class IfsListAttributeResponse : IfsChainedPacketBase
     {
         public const ushort ID = 0x8005;
-
-        public ushort Chain
-        {
-            get
-            {
-                return Data.ReadUInt16BE(20);
-            }
-            set
-            {
-                Data.WriteBE(20, value);
-            }
-        }
 
         public DateTime CreationDate
         {
@@ -57,18 +45,6 @@ namespace N400.Packets
                 throw new NotImplementedException();
             }
         }
-
-        //public uint FileSize
-        //{
-        //    get
-        //    {
-        //        return Data.ReadUInt32BE(46);
-        //    }
-        //    set
-        //    {
-        //        Data.WriteBE(46, value);
-        //    }
-        //}
 
         public uint FixedAttributes
         {

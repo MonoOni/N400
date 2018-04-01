@@ -7,20 +7,8 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class IfsExchangeAttributesRequest : Packet
+    internal class IfsExchangeAttributesRequest : IfsChainedPacketBase
     {
-        public ushort Chain
-        {
-            get
-            {
-                return Data.ReadUInt16BE(20);
-            }
-            set
-            {
-                Data.WriteBE(20, value);
-            }
-        }
-
         public ushort DataStreamLevel
         {
             get
@@ -113,7 +101,6 @@ namespace N400.Packets
         public IfsExchangeAttributesRequest(ushort[] ccsids)
             : base(36 + ((ccsids?.Length ?? 0) * 8))
         {
-            ServiceID = IfsService.SERVICE_ID;
             RequestResponseID = 0x0016;
             TemplateLength = 10;
 
