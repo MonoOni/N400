@@ -32,14 +32,14 @@ namespace N400.FileSystem
             
             Server = server;
 
-            service = new Services.IfsService(server);
+            service = new IfsService(server);
         }
 
         /// <summary>
         /// Gets file attributes for a path and/or glob.
         /// </summary>
         /// <param name="path">The path specification to list.</param>
-        /// <returns>A listing of file attributes.</returns>
+        /// <returns>An iterator of file attributes.</returns>
         public IEnumerable<FileAttributes> List(string path)
         {
             return service.List(path);

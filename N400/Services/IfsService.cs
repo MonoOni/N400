@@ -84,41 +84,41 @@ namespace N400.Services
             ushort chain = 1;
             while (chain != 0)
             {
-                var listResBoxed = ReadPacket<Packet>();
+                var boxed = ReadPacket<Packet>();
 
-                if (listResBoxed.RequestResponseID == IfsReturnCodeResponse.ID)
+                if (boxed.RequestResponseID == IfsReturnCodeResponse.ID)
                 {
-                    var infoRes = new IfsReturnCodeResponse(listResBoxed.Data);
-                    chain = infoRes.Chain;
-                    switch (infoRes.ReturnCode)
+                    var listRes = new IfsReturnCodeResponse(boxed.Data);
+                    chain = listRes.Chain;
+                    switch (listRes.ReturnCode)
                     {
                         case NO_MORE_FILES:
                             goto end;
                         default:
-                            throw new Exception($"The file service returned an error: {infoRes.ReturnCode}");
+                            throw new Exception($"The file service returned an error: {listRes.ReturnCode}");
                     }
                 }
-                else if (listResBoxed.RequestResponseID == IfsListAttributeResponse.ID)
+                else if (boxed.RequestResponseID == IfsListAttributeResponse.ID)
                 {
-                    var infoRes = new IfsListAttributeResponse(listResBoxed.Data);
-                    chain = infoRes.Chain;
-                    var nameString = Encoding.BigEndianUnicode.GetString(infoRes.FileName);
+                    var listRes = new IfsListAttributeResponse(boxed.Data);
+                    chain = listRes.Chain;
+                    var nameString = Encoding.BigEndianUnicode.GetString(listRes.FileName);
                     var fullPath = string.Format("{0}/{1}", basePath, nameString);
 
                     var attributes = new FileAttributes(nameString,
                         fullPath,
-                        infoRes.ObjectType == 2,
-                        infoRes.Symlink,
-                        infoRes.FileSize,
-                        infoRes.CreationDate,
-                        infoRes.ModificationDate,
-                        infoRes.AccessDate,
-                        infoRes.FileCCSID,
-                        infoRes.Version);
+                        listRes.ObjectType == 2,
+                        listRes.Symlink,
+                        listRes.FileSize,
+                        listRes.CreationDate,
+                        listRes.ModificationDate,
+                        listRes.AccessDate,
+                        listRes.FileCCSID,
+                        listRes.Version);
                     yield return attributes;
                 }
                 else
-                    throw new Exception($"The file service returned an unknown packet ID: {listResBoxed.RequestResponseID}");
+                    throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
             }
             end:
             ;
