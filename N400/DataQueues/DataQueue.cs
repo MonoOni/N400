@@ -43,7 +43,7 @@ namespace N400.DataQueues
         byte[] nameEbcdic, libraryEbcdic;
 
         /// <summary>
-        /// The servers to access data queues on.
+        /// The server to access data queues on.
         /// </summary>
         public Server Server { get; private set; }
         /// <summary>
@@ -59,7 +59,7 @@ namespace N400.DataQueues
         /// Creates a new data queue object.
         /// </summary>
         /// <param name="server">
-        /// The servers to access data queues on.
+        /// The server to access data queues on.
         /// </param>
         /// <param name="name">
         /// The name of the data queue to access.

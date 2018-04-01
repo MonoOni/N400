@@ -28,6 +28,8 @@ namespace N400.Services
                 Connect();
                 if (!Connected)
                     throw new Exception("Couldn't connect to the data queue service.");
+
+                attributesExchanged = false;
             }
             if (!attributesExchanged)
             {

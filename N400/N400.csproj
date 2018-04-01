@@ -44,6 +44,7 @@
     <Compile Include="DataQueues\DataQueue.cs" />
     <Compile Include="DataQueues\DataQueueAuthority.cs" />
     <Compile Include="DataQueues\DataQueueEntry.cs" />
+    <Compile Include="FileSystem\FileSystem.cs" />
     <Compile Include="Packets\DataQueueClearRequest.cs" />
     <Compile Include="Packets\DataQueueCreateRequest.cs" />
     <Compile Include="Packets\DataQueueDeleteRequest.cs" />
@@ -53,6 +54,8 @@
     <Compile Include="Packets\DataQueueRequestBase.cs" />
     <Compile Include="Packets\DataQueueReturnCodeResponse.cs" />
     <Compile Include="Packets\DataQueueWriteRequest.cs" />
+    <Compile Include="Packets\IfsExchangeAttributesRequest.cs" />
+    <Compile Include="Packets\IfsExchangeAttributesResponse.cs" />
     <Compile Include="Services\Connection.cs" />
     <Compile Include="Globalization\EbcidicConverter.cs" />
     <Compile Include="Globalization\LocaleMapping.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="PortMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataQueueService.cs" />
+    <Compile Include="Services\IfsService.cs" />
     <Compile Include="Services\RemoteCommandService.cs" />
     <Compile Include="Services\Service.cs" />
     <Compile Include="Services\SignonService.cs" />
