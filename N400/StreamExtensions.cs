@@ -221,7 +221,7 @@ namespace N400
         /// <returns>An unsigned 64-bit integer.</returns>
         public static ulong ReadUInt64BE(this BinaryReader br)
         {
-            var b = br.ReadBytes(4);
+            var b = br.ReadBytes(8);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(b);
             return BitConverter.ToUInt64(b, 0);
@@ -237,8 +237,8 @@ namespace N400
         /// <returns>An unsigned 64-bit integer.</returns>
         public static ulong ReadUInt64BE(this byte[] ba, int offset = 0)
         {
-            var b = new byte[4];
-            Array.Copy(ba, offset, b, 0, 4);
+            var b = new byte[8];
+            Array.Copy(ba, offset, b, 0, 8);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(b);
             return BitConverter.ToUInt64(b, 0);
@@ -280,22 +280,22 @@ namespace N400
         }
 
         /// <summary>
-        /// Reads 8 bytes and returns a timestamp.
+        /// Reads 8 bytes and returns a UTC timestamp.
         /// </summary>
         /// <param name="ba">
         /// A byte array that has a DateTime in IFS serialization format to
         /// read.
         /// </param>
         /// <param name="offset">The position of the data.</param>
-        /// <returns>A timestamp.</returns>
+        /// <returns>A UTC timestamp.</returns>
         public static DateTime ReadDateTimeIfs(this byte[] ba, int offset = 0)
         {
-            var seconds = ba.ReadInt32BE();
-            var museconds = ba.ReadInt32BE(4);
+            var seconds = ba.ReadUInt32BE(offset);
+            var museconds = ba.ReadUInt32BE(offset + 4);
             var milliseconds = (seconds * 1000L) + (museconds / 1000);
 
-            var dt = new DateTime();;
-            dt.AddMilliseconds(milliseconds);
+            var dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                .AddMilliseconds(milliseconds);
             return dt;
         }
     }

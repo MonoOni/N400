@@ -28,8 +28,9 @@ namespace N400.Demo
 
             var fs = new FileSystem.FileSystem(s);
             var files = fs.List("/home/CALVIN/*");
+            var filesList = files.ToList();
 
-            foreach (var file in files)
+            foreach (var file in filesList)
             {
                 Console.WriteLine(file);
             }

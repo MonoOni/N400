@@ -1,4 +1,5 @@
-﻿using N400.Packets;
+﻿using N400.FileSystem;
+using N400.Packets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,9 +64,17 @@ namespace N400.Services
             }
         }
 
-        public IEnumerable<string> List(string path)
+        public IEnumerable<FileAttributes> List(string path)
         {
             EnsureInitialized();
+
+            // append a * if there's a /, it's picky about trailing slashes
+            if (path.EndsWith("/"))
+                path += "*";
+
+            // get the base dir
+            var lastSlash = path.LastIndexOf("/");
+            var basePath = path.Substring(0, lastSlash);
 
             var pathBytes = Encoding.BigEndianUnicode.GetBytes(path);
 
@@ -89,12 +98,24 @@ namespace N400.Services
                             throw new Exception($"The file service returned an error: {infoRes.ReturnCode}");
                     }
                 }
-                else if (listResBoxed.RequestResponseID == 0x8005)
+                else if (listResBoxed.RequestResponseID == IfsListAttributeResponse.ID)
                 {
                     var infoRes = new IfsListAttributeResponse(listResBoxed.Data);
                     chain = infoRes.Chain;
                     var nameString = Encoding.BigEndianUnicode.GetString(infoRes.FileName);
-                    yield return nameString;
+                    var fullPath = string.Format("{0}/{1}", basePath, nameString);
+
+                    var attributes = new FileAttributes(nameString,
+                        fullPath,
+                        infoRes.ObjectType == 2,
+                        infoRes.Symlink,
+                        infoRes.FileSize,
+                        infoRes.CreationDate,
+                        infoRes.ModificationDate,
+                        infoRes.AccessDate,
+                        infoRes.FileCCSID,
+                        infoRes.Version);
+                    yield return attributes;
                 }
                 else
                     throw new Exception($"The file service returned an unknown packet ID: {listResBoxed.RequestResponseID}");
