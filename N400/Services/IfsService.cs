@@ -18,13 +18,11 @@ namespace N400.Services
         public const ushort SERVICE_ID = 0xE002;
 
         bool attributesExchanged;
-        ushort level;
 
         public IfsService(Server server) :
             base(server, SERVICE_ID, "as-file", null, 8473, 9473)
         {
             attributesExchanged = false;
-            level = 0;
         }
 
         void EnsureInitialized()
@@ -58,11 +56,14 @@ namespace N400.Services
                         "An error occured when exchanging attributes with the file service: " +
                         $"{infoRes.ReturnCode}");
 
-                level = infoRes.DataStreamLevel;
+                if (infoRes.DataStreamLevel < 16)
+                    throw new Exception("The data stream level doesn't support the necessary features.");
 
                 attributesExchanged = true;
             }
         }
+
+        static byte[] BigEndianBytes(string s) => Encoding.BigEndianUnicode.GetBytes(s);
 
         public List<FileAttributes> List(string path)
         {
@@ -72,7 +73,7 @@ namespace N400.Services
             var lastSlash = path.LastIndexOf("/");
             var basePath = path.Substring(0, lastSlash);
 
-            var pathBytes = Encoding.BigEndianUnicode.GetBytes(path);
+            var pathBytes = BigEndianBytes(path);
 
             var listReq = new IfsListAttributesRequest(pathBytes);
             WritePacket(listReq);
@@ -129,6 +130,61 @@ namespace N400.Services
             }
             end:
             return list;
+        }
+
+        public AS400FileStream Open(string fileName,
+            OpenMode openMode,
+            ShareMode shareMode,
+            bool create,
+            ushort ccsid)
+        {
+            EnsureInitialized();
+
+            var fileNameBytes = BigEndianBytes(fileName);
+            var openReq = new IfsOpenFileRequest(fileNameBytes,
+                openMode,
+                shareMode,
+                create,
+                ccsid);
+            WritePacket(openReq);
+
+            var boxed = ReadPacket<Packet>();
+
+            if (boxed.RequestResponseID == IfsReturnCodeResponse.ID)
+            {
+                var openRes = new IfsReturnCodeResponse(boxed.Data);
+                throw new Exception($"The file service returned an error: {openRes.ReturnCode}");
+            }
+            else if (boxed.RequestResponseID == IfsOpenFileResponse.ID)
+            {
+                var openRes = new IfsOpenFileResponse(boxed.Data);
+                var attribs = new FileAttributes(fileName,
+                    fileName,
+                    false,
+                    false,
+                    openRes.FileSize,
+                    openRes.CreationDate,
+                    openRes.ModificationDate,
+                    openRes.AccessDate,
+                    openRes.FileCCSID,
+                    openRes.Version);
+
+                var stream = new AS400FileStream(openRes.Handle, openMode, attribs, this);
+                return stream;
+            }
+            else
+                throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
+        }
+
+        public ushort Close(uint handle)
+        {
+            EnsureInitialized();
+
+            var closeReq = new IfsCloseFileRequest(handle);
+            WritePacket(closeReq);
+
+            var closeRes = ReadPacket<IfsReturnCodeResponse>();
+            return closeRes.ReturnCode;
         }
     }
 }

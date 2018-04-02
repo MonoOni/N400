@@ -42,11 +42,39 @@ namespace N400.FileSystem
         /// <returns>An iterator of file attributes.</returns>
         public List<FileAttributes> List(string path)
         {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
             // append a * if there's a /, it's picky about trailing slashes
             if (path.EndsWith("/"))
                 path += "*";
 
             return service.List(path);
+        }
+
+        /// <summary>
+        /// Opens a file handle on the server.
+        /// </summary>
+        /// <param name="path">The path of the item to open.</param>
+        /// <param name="openMode">How the item should be opened.</param>
+        /// <param name="shareMode">The sharing mode of the item.</param>
+        /// <param name="create">
+        /// If the item should be created if it doesn't exist.
+        /// </param>
+        /// <param name="ccsid">
+        /// The CCSID of the file. By default, the CCSID for UTF-8.
+        /// </param>
+        /// <returns>A stream with the file handle.</returns>
+        public AS400FileStream Open(string path,
+            OpenMode openMode = OpenMode.ReadWrite,
+            ShareMode shareMode = ShareMode.All,
+            bool create = false,
+            ushort ccsid = 1208) // UTF-8
+        {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            return service.Open(path, openMode, shareMode, create, ccsid);
         }
     }
 }

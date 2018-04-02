@@ -44,8 +44,11 @@
     <Compile Include="DataQueues\DataQueue.cs" />
     <Compile Include="DataQueues\DataQueueAuthority.cs" />
     <Compile Include="DataQueues\DataQueueEntry.cs" />
+    <Compile Include="FileSystem\AS400FileStream.cs" />
     <Compile Include="FileSystem\FileAttributes.cs" />
     <Compile Include="FileSystem\FileSystem.cs" />
+    <Compile Include="FileSystem\OpenMode.cs" />
+    <Compile Include="FileSystem\ShareMode.cs" />
     <Compile Include="Packets\DataQueueClearRequest.cs" />
     <Compile Include="Packets\DataQueueCreateRequest.cs" />
     <Compile Include="Packets\DataQueueDeleteRequest.cs" />
@@ -56,10 +59,13 @@
     <Compile Include="Packets\DataQueueReturnCodeResponse.cs" />
     <Compile Include="Packets\DataQueueWriteRequest.cs" />
     <Compile Include="Packets\IfsChainedPacketBase.cs" />
+    <Compile Include="Packets\IfsCloseFileRequest.cs" />
     <Compile Include="Packets\IfsExchangeAttributesRequest.cs" />
     <Compile Include="Packets\IfsExchangeAttributesResponse.cs" />
     <Compile Include="Packets\IfsListAttributeResponse.cs" />
     <Compile Include="Packets\IfsListAttributesRequest.cs" />
+    <Compile Include="Packets\IfsOpenFileRequest.cs" />
+    <Compile Include="Packets\IfsOpenFileResponse.cs" />
     <Compile Include="Packets\IfsReturnCodeResponse.cs" />
     <Compile Include="Services\Connection.cs" />
     <Compile Include="Globalization\EbcidicConverter.cs" />
