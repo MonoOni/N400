@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class StartServerResponse : ResponsePacket
+    internal class StartServerResponse : SignonReturnCodeResponseBase
     {
         const ushort ID = 0xF002;
         const ushort USERID = 0x1104;

@@ -71,7 +71,7 @@
     <Compile Include="Packets\SignonInfoResponse.cs" />
     <Compile Include="Packets\SignonSeedExchangeSeedRequest.cs" />
     <Compile Include="Packets\SignonSeedExchangeResponse.cs" />
-    <Compile Include="Packets\ResponsePacket.cs" />
+    <Compile Include="Packets\SignonReturnCodeResponseBase.cs" />
     <Compile Include="Packets\StartServerRequest.cs" />
     <Compile Include="Packets\StartServerResponse.cs" />
     <Compile Include="PortMapperMode.cs" />

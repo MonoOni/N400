@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class SignonInfoResponse : ResponsePacket
+    internal class SignonInfoResponse : SignonReturnCodeResponseBase
     {
         public const int LENGTH = 147;
         const ushort ID = 0xF004;

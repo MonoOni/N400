@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class RandomSeedExchangeResponse : ResponsePacket
+    internal class RandomSeedExchangeResponse : SignonReturnCodeResponseBase
     {
         const ushort ID = 0xF001;
 

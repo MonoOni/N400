@@ -276,8 +276,8 @@ namespace N400.Packets
         /// <remarks>
         /// Note that in error cases, the packet may be smaller than expected,
         /// and as such, are not a full packet. These generally have return
-        /// codes like <see cref="ResponsePacket"/> does, so check the return
-        /// code before accessing any members not found in child classes.
+        /// codes, so check the return code before accessing any members not
+        /// found in child classes.
         /// </remarks>
         internal static T ReadPacket<T>(Stream connection) where T : Packet, new()
         {

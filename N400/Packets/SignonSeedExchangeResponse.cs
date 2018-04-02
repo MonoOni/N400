@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace N400.Packets
 {
-    internal class SignonSeedExchangeResponse : ResponsePacket
+    internal class SignonSeedExchangeResponse : SignonReturnCodeResponseBase
     {
         public const int LENGTH = 94;
         const ushort ID = 0xF003;
