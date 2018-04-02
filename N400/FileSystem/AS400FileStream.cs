@@ -32,6 +32,7 @@ namespace N400.FileSystem
             fileHandle = handle;
 
             position = 0;
+            length = Convert.ToInt64(FileAttributes.FileSize);
         }
 
         #region Base Class Members
@@ -122,8 +123,10 @@ namespace N400.FileSystem
 
             var unwritten = service.Write(fileHandle, tmpBuf, Position, false, FileAttributes.DataCCSID);
 
-            Position += (tmpBuf.Length - unwritten);
-            SetLength(Length + (tmpBuf.Length - unwritten));
+            var newLen = Position + (tmpBuf.Length - unwritten);
+            Position = newLen;
+            if (newLen > Length)
+                SetLength(newLen);
         }
 
         /// <summary>

@@ -93,8 +93,8 @@ namespace N400.Packets
             Handle = handle;
             Sync = sync;
             CCSID = ccsid;
-            BaseOffset = 0;
-            RelativeOffset = offset;
+            BaseOffset = offset;
+            RelativeOffset = 0;
             ToWrite = data;
         }
     }
