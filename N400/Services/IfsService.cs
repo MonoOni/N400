@@ -64,7 +64,7 @@ namespace N400.Services
             }
         }
 
-        public IEnumerable<FileAttributes> List(string path)
+        public List<FileAttributes> List(string path)
         {
             EnsureInitialized();
 
@@ -80,6 +80,8 @@ namespace N400.Services
 
             var listReq = new IfsListAttributesRequest(pathBytes);
             WritePacket(listReq);
+
+            var list = new List<FileAttributes>();
 
             ushort chain = 1;
             while (chain != 0)
@@ -100,28 +102,37 @@ namespace N400.Services
                 }
                 else if (boxed.RequestResponseID == IfsListAttributeResponse.ID)
                 {
-                    var listRes = new IfsListAttributeResponse(boxed.Data);
-                    chain = listRes.Chain;
-                    var nameString = Encoding.BigEndianUnicode.GetString(listRes.FileName);
-                    var fullPath = string.Format("{0}/{1}", basePath, nameString);
+                    try
+                    {
+                        var listRes = new IfsListAttributeResponse(boxed.Data);
+                        chain = listRes.Chain;
+                        var nameString = Encoding.BigEndianUnicode.GetString(listRes.FileName);
+                        var fullPath = string.Format("{0}/{1}", basePath, nameString);
 
-                    var attributes = new FileAttributes(nameString,
-                        fullPath,
-                        listRes.ObjectType == 2,
-                        listRes.Symlink,
-                        listRes.FileSize,
-                        listRes.CreationDate,
-                        listRes.ModificationDate,
-                        listRes.AccessDate,
-                        listRes.FileCCSID,
-                        listRes.Version);
-                    yield return attributes;
+                        var attributes = new FileAttributes(nameString,
+                            fullPath,
+                            listRes.ObjectType == 2,
+                            listRes.Symlink,
+                            listRes.FileSize,
+                            listRes.CreationDate,
+                            listRes.ModificationDate,
+                            listRes.AccessDate,
+                            listRes.FileCCSID,
+                            listRes.Version);
+                        list.Add(attributes);
+                    }
+                    catch (Exception)
+                    {
+                        // there may be packets left, we can't risk choking on
+                        // a parsing error and leaving them there
+                        continue;
+                    }
                 }
                 else
                     throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
             }
             end:
-            ;
+            return list;
         }
     }
 }

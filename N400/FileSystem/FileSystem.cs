@@ -40,7 +40,7 @@ namespace N400.FileSystem
         /// </summary>
         /// <param name="path">The path specification to list.</param>
         /// <returns>An iterator of file attributes.</returns>
-        public IEnumerable<FileAttributes> List(string path)
+        public List<FileAttributes> List(string path)
         {
             return service.List(path);
         }
