@@ -186,5 +186,52 @@ namespace N400.Services
             var closeRes = ReadPacket<IfsReturnCodeResponse>();
             return closeRes.ReturnCode;
         }
+
+        // HACK: i hate that .NET uses signed values for Stream but the AS/400
+        // APIs seem to assume unsigned values; so we'll risk it and use
+        // signed values for dealing with read and write
+        public byte[] Read(uint handle, long offset, int length)
+        {
+            EnsureInitialized();
+
+            var readReq = new IfsReadRequest(handle, offset, length);
+            WritePacket(readReq);
+            var boxed = ReadPacket<Packet>();
+
+            if (boxed.RequestResponseID == IfsReturnCodeResponse.ID)
+            {
+                var openRes = new IfsReturnCodeResponse(boxed.Data);
+                throw new Exception($"The file service returned an error: {openRes.ReturnCode}");
+            }
+            else if (boxed.RequestResponseID == IfsReadResponse.ID)
+            {
+                var openRes = new IfsReadResponse(boxed.Data);
+                return openRes.FieldData;
+            }
+            else
+                throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
+        }
+
+        public int Write(uint handle, byte[] data, long offset, bool sync, ushort ccsid)
+        {
+            EnsureInitialized();
+
+            var writeReq = new IfsWriteRequest(handle, data, offset, sync, ccsid);
+            WritePacket(writeReq);
+            var boxed = ReadPacket<Packet>();
+
+            if (boxed.RequestResponseID == IfsReturnCodeResponse.ID)
+            {
+                var openRes = new IfsReturnCodeResponse(boxed.Data);
+                throw new Exception($"The file service returned an error: {openRes.ReturnCode}");
+            }
+            else if (boxed.RequestResponseID == IfsWriteResponse.ID)
+            {
+                var openRes = new IfsWriteResponse(boxed.Data);
+                return openRes.BytesNotWritten;
+            }
+            else
+                throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
+        }
     }
 }

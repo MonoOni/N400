@@ -66,7 +66,11 @@
     <Compile Include="Packets\IfsListAttributesRequest.cs" />
     <Compile Include="Packets\IfsOpenFileRequest.cs" />
     <Compile Include="Packets\IfsOpenFileResponse.cs" />
+    <Compile Include="Packets\IfsReadRequest.cs" />
+    <Compile Include="Packets\IfsReadResponse.cs" />
     <Compile Include="Packets\IfsReturnCodeResponse.cs" />
+    <Compile Include="Packets\IfsWriteRequest.cs" />
+    <Compile Include="Packets\IfsWriteResponse.cs" />
     <Compile Include="Services\Connection.cs" />
     <Compile Include="Globalization\EbcidicConverter.cs" />
     <Compile Include="Globalization\LocaleMapping.cs" />

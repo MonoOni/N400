@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,11 +28,25 @@ namespace N400.Demo
             //Console.WriteLine(dqe?.Data?.ToString() ?? "no data");
 
             var fs = new FileSystem.FileSystem(s);
-            var files = fs.List("/home/CALVIN/*");
+            //var files = fs.List("/home/CALVIN/*");
 
-            foreach (var file in files)
+            //foreach (var file in files)
+            //{
+            //    Console.WriteLine(file);
+            //}
+            using (var stream = fs.Open("/home/CALVIN/hello.test", create: true))
             {
-                Console.WriteLine(file);
+                using (var sw = new BinaryWriter(stream))
+                {
+                    sw.Write("C:\\tmp\\input.txt");
+                    // not reset?
+                    stream.Position = 0;
+                    using (var sr = new StreamReader(stream))
+                    {
+                        var str = sr.ReadToEnd();
+                        Console.WriteLine(str);
+                    }
+                }
             }
 
             Console.ReadLine();

@@ -213,6 +213,52 @@ namespace N400
         }
 
         /// <summary>
+        /// Reads 8 bytes in big endian and returns a signed 64-bit integer.
+        /// </summary>
+        /// <param name="br">
+        /// A <see cref="BinaryReader"/> that has a long in big endian to read.
+        /// </param>
+        /// <returns>A signed 64-bit integer.</returns>
+        public static long ReadInt64BE(this BinaryReader br)
+        {
+            var b = br.ReadBytes(8);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(b);
+            return BitConverter.ToInt64(b, 0);
+        }
+
+        /// <summary>
+        /// Reads 8 bytes in big endian and returns a signed 64-bit integer.
+        /// </summary>
+        /// <param name="ba">
+        /// A byte array that has a long in big endian to read.
+        /// </param>
+        /// <param name="offset">The position of the data.</param>
+        /// <returns>A nsigned 64-bit integer.</returns>
+        public static long ReadInt64BE(this byte[] ba, int offset = 0)
+        {
+            var b = new byte[8];
+            Array.Copy(ba, offset, b, 0, 8);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(b);
+            return BitConverter.ToInt64(b, 0);
+        }
+
+        /// <summary>
+        /// Writes a value to an array in big endian.
+        /// </summary>
+        /// <param name="ba">The array to write to.</param>
+        /// <param name="offset">The starting position to write to.</param>
+        /// <param name="value">The signed 64-bit integer to write.</param>
+        public static void WriteBE(this byte[] ba, int offset, long value)
+        {
+            var b = BitConverter.GetBytes(value);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(b);
+            Array.Copy(b, 0, ba, offset, b.Length);
+        }
+
+        /// <summary>
         /// Reads 8 bytes in big endian and returns an unsigned 64-bit integer.
         /// </summary>
         /// <param name="br">

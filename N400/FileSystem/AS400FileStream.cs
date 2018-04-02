@@ -22,12 +22,16 @@ namespace N400.FileSystem
         uint fileHandle;
         IfsService service;
 
+        long position, length;
+
         internal AS400FileStream(uint handle, OpenMode mode, FileAttributes attribs, IfsService ifs)
         {
             FileAttributes = attribs;
             openMode = mode;
             service = ifs;
             fileHandle = handle;
+
+            position = 0;
         }
 
         #region Base Class Members
@@ -54,35 +58,49 @@ namespace N400.FileSystem
             }
         }
 
-        public override long Length
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        /// <summary>
+        /// The length of the stream.
+        /// </summary>
+        public override long Length => length;
 
+        /// <summary>
+        /// The current position of the stream.
+        /// </summary>
         public override long Position
         {
             get
             {
-                throw new NotImplementedException();
+                return position;
             }
-
             set
             {
-                throw new NotImplementedException();
+                position = value;
             }
         }
 
+        /// <summary>
+        /// No-op for this stream.
+        /// </summary>
         public override void Flush()
         {
-            throw new NotImplementedException();
+            // no-op
         }
 
+        // everything's bad because protocol is unsigned but Stream is signed
+        // so we cheat and pretend everything's signed for Read/Write packets
         public override int Read(byte[] buffer, int offset, int count)
         {
-            throw new NotImplementedException();
+            // HACK: try to satisfy StreamReader (not working yet)
+            if (Position > Length)
+                return 0;
+
+            var tmpBuf = service.Read(fileHandle, Position, count);
+            var ret = tmpBuf.Length;
+
+            Array.Copy(tmpBuf, 0, buffer, offset, ret);
+
+            Position += ret;
+            return ret;
         }
 
         /// <summary>
@@ -95,12 +113,17 @@ namespace N400.FileSystem
 
         public override void SetLength(long value)
         {
-            throw new NotImplementedException();
+            length = value;
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            throw new NotImplementedException();
+            var tmpBuf = buffer.Slice(offset, count);
+
+            var unwritten = service.Write(fileHandle, tmpBuf, Position, false, FileAttributes.DataCCSID);
+
+            Position += (tmpBuf.Length - unwritten);
+            SetLength(Length + (tmpBuf.Length - unwritten));
         }
 
         /// <summary>

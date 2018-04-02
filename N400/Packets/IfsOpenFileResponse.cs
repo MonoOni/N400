@@ -42,7 +42,16 @@ namespace N400.Packets
 
         public byte AccessHistory => Data[88];
 
-        public ulong FileSize => Data.ReadUInt64BE(89);
+        public ulong FileSize
+        {
+            get
+            {
+                if (PacketLength >= 97)
+                    return Data.ReadUInt64BE(89);
+                else
+                    return Data.ReadUInt32BE(62);
+            }
+        }
 
         public IfsOpenFileResponse(byte[] data) : base(data)
         {
