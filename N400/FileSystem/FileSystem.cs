@@ -42,6 +42,10 @@ namespace N400.FileSystem
         /// <returns>An iterator of file attributes.</returns>
         public List<FileAttributes> List(string path)
         {
+            // append a * if there's a /, it's picky about trailing slashes
+            if (path.EndsWith("/"))
+                path += "*";
+
             return service.List(path);
         }
     }

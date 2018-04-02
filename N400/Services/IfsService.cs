@@ -68,10 +68,6 @@ namespace N400.Services
         {
             EnsureInitialized();
 
-            // append a * if there's a /, it's picky about trailing slashes
-            if (path.EndsWith("/"))
-                path += "*";
-
             // get the base dir
             var lastSlash = path.LastIndexOf("/");
             var basePath = path.Substring(0, lastSlash);
