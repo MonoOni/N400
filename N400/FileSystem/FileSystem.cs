@@ -39,8 +39,10 @@ namespace N400.FileSystem
         /// Gets file attributes for a path and/or glob.
         /// </summary>
         /// <param name="path">The path specification to list.</param>
+        /// <param name="globMode">The method to match patterns by.</param>
         /// <returns>An iterator of file attributes.</returns>
-        public List<FileAttributes> List(string path)
+        public List<FileAttributes> List(string path,
+            PatternMatchingMode globMode = PatternMatchingMode.PosixAll)
         {
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
@@ -49,7 +51,7 @@ namespace N400.FileSystem
             if (path.EndsWith("/"))
                 path += "*";
 
-            return service.List(path);
+            return service.List(path, globMode);
         }
 
         /// <summary>

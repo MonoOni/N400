@@ -65,7 +65,7 @@ namespace N400.Services
 
         static byte[] BigEndianBytes(string s) => Encoding.BigEndianUnicode.GetBytes(s);
 
-        public List<FileAttributes> List(string path)
+        public List<FileAttributes> List(string path, PatternMatchingMode globMode)
         {
             EnsureInitialized();
 
@@ -75,7 +75,7 @@ namespace N400.Services
 
             var pathBytes = BigEndianBytes(path);
 
-            var listReq = new IfsListAttributesRequest(pathBytes);
+            var listReq = new IfsListAttributesRequest(pathBytes, globMode);
             WritePacket(listReq);
 
             var list = new List<FileAttributes>();

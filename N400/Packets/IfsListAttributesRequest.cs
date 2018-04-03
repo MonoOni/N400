@@ -1,4 +1,5 @@
-﻿using N400.Services;
+﻿using N400.FileSystem;
+using N400.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,17 +83,16 @@ namespace N400.Packets
                 Data.WriteBE(36, value);
             }
         }
-
-        // TODO: convert to enum
-        public ushort PatternMatchingMode
+        
+        public PatternMatchingMode PatternMatchingMode
         {
             get
             {
-                return Data.ReadUInt16BE(38);
+                return (PatternMatchingMode)Data.ReadUInt16BE(38);
             }
             set
             {
-                Data.WriteBE(38, value);
+                Data.WriteBE(38, (ushort)value);
             }
         }
 
@@ -109,7 +109,8 @@ namespace N400.Packets
         }
 
         // TODO: make this customizable
-        public IfsListAttributesRequest(byte[] pathBytes)
+        public IfsListAttributesRequest(byte[] pathBytes,
+            PatternMatchingMode globMode)
             : base(46 + pathBytes.Length)
         {
             TemplateLength = 20;
@@ -122,7 +123,7 @@ namespace N400.Packets
             Authority = 0;
             MaxItems = ushort.MaxValue;
             AttributeListLevel = 0x0101; // returns a ulong filesize
-            PatternMatchingMode = 1; // POSIX all
+            PatternMatchingMode = globMode;
             Path = pathBytes;
         }
     }

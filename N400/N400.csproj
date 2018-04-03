@@ -49,6 +49,7 @@
     <Compile Include="FileSystem\FileSystem.cs" />
     <Compile Include="FileSystem\ObjectType.cs" />
     <Compile Include="FileSystem\OpenMode.cs" />
+    <Compile Include="FileSystem\PatternMatchingMode.cs" />
     <Compile Include="FileSystem\ShareMode.cs" />
     <Compile Include="Packets\DataQueueClearRequest.cs" />
     <Compile Include="Packets\DataQueueCreateRequest.cs" />
