@@ -49,16 +49,9 @@ namespace N400.FileSystem
             openMode == OpenMode.Write || openMode == OpenMode.ReadWrite;
 
         /// <summary>
-        /// Not supported for this stream.
+        /// If the position can be moved.
         /// </summary>
-        public override bool CanSeek
-        {
-            get
-            {
-                throw new NotSupportedException();
-            }
-        }
-
+        public override bool CanSeek => true;
         /// <summary>
         /// The length of the stream.
         /// </summary>
@@ -89,10 +82,19 @@ namespace N400.FileSystem
 
         // everything's bad because protocol is unsigned but Stream is signed
         // so we cheat and pretend everything's signed for Read/Write packets
+        /// <summary>
+        /// Reads bytes from the stream into a byte array.
+        /// </summary>
+        /// <param name="buffer">The byte array to write to.</param>
+        /// <param name="offset">
+        /// The position of the byte array in which to write.
+        /// </param>
+        /// <param name="count">How many bytes to read.</param>
+        /// <returns>How many bytes were read.</returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
             // HACK: try to satisfy StreamReader (not working yet)
-            if (Position > Length)
+            if (Position >= Length)
                 return 0;
 
             var tmpBuf = service.Read(fileHandle, Position, count);
@@ -105,18 +107,44 @@ namespace N400.FileSystem
         }
 
         /// <summary>
-        /// Not supported for this stream.
+        /// Moves the position to the relative mode.
         /// </summary>
         public override long Seek(long offset, SeekOrigin origin)
         {
-            throw new NotSupportedException();
+            switch (origin)
+            {
+                case SeekOrigin.Current:
+                    Position += offset;
+                    break;
+                case SeekOrigin.Begin:
+                    Position = offset;
+                    break;
+                case SeekOrigin.End:
+                    Position = Length + offset;
+                    break;
+            }
+            return Position;
         }
 
+        /// <summary>
+        /// Sets a new length for the stream.
+        /// </summary>
+        /// <param name="value">The new length value.</param>
         public override void SetLength(long value)
         {
             length = value;
         }
 
+        /// <summary>
+        /// Writes data to the stream.
+        /// </summary>
+        /// <param name="buffer">
+        /// The byte array to read data from.
+        /// </param>
+        /// <param name="offset">
+        /// Where in the array to start writing from.
+        /// </param>
+        /// <param name="count">How many bytes to write.</param>
         public override void Write(byte[] buffer, int offset, int count)
         {
             var tmpBuf = buffer.Slice(offset, count);
