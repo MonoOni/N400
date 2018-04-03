@@ -53,6 +53,18 @@ namespace N400.FileSystem
         }
 
         /// <summary>
+        /// Deletes a file.
+        /// </summary>
+        /// <param name="path">The path of the file to delete.</param>
+        public void DeleteFile(string path)
+        {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            service.DeleteFile(path);
+        }
+
+        /// <summary>
         /// Opens a file handle on the server.
         /// </summary>
         /// <param name="path">The path of the item to open.</param>

@@ -132,6 +132,19 @@ namespace N400.Services
             return list;
         }
 
+        public void DeleteFile(string fileName)
+        {
+            EnsureInitialized();
+
+            var fileNameBytes = BigEndianBytes(fileName);
+            var deleteReq = new IfsDeleteFileRequest(fileNameBytes);
+            WritePacket(deleteReq);
+
+            var deleteRes = ReadPacket<IfsReturnCodeResponse>();
+            if (deleteRes.ReturnCode != 0)
+                throw new Exception($"The file service returned an error: {deleteRes.ReturnCode}");
+        }
+
         public AS400FileStream Open(string fileName,
             OpenMode openMode,
             ShareMode shareMode,

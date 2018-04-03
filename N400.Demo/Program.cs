@@ -28,13 +28,8 @@ namespace N400.Demo
             //Console.WriteLine(dqe?.Data?.ToString() ?? "no data");
 
             var fs = new FileSystem.FileSystem(s);
-            //var files = fs.List("/home/CALVIN/*");
-
-            //foreach (var file in files)
-            //{
-            //    Console.WriteLine(file);
-            //}
-            using (var stream = fs.Open("/home/CALVIN/hello.test", create: true))
+            const string fileName = "/home/CALVIN/hello.test";
+            using (var stream = fs.Open(fileName, create: true))
             {
                 //stream.Position = 4;
                 //stream.Write(Encoding.Default.GetBytes("TEST"), 0, 4);
@@ -54,6 +49,13 @@ namespace N400.Demo
                         Console.WriteLine(str);
                     }
                 }
+            }
+            fs.DeleteFile(fileName);
+            var files = fs.List("/home/CALVIN/*");
+
+            foreach (var file in files)
+            {
+                Console.WriteLine(file);
             }
 
             Console.ReadLine();
