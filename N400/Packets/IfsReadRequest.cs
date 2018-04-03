@@ -49,15 +49,19 @@ namespace N400.Packets
             }
         }
 
+        // HACK: same long not working hack as in IfsWriteRequest
+
         public long BaseOffset
         {
             get
             {
-                return Data.ReadInt64BE(42);
+                return Data.ReadInt32BE(26);
+                //return Data.ReadInt64BE(42);
             }
             set
             {
-                Data.WriteBE(42, value);
+                Data.WriteBE(26, Convert.ToInt32(value));
+                //Data.WriteBE(42, value);
             }
         }
 
@@ -65,19 +69,22 @@ namespace N400.Packets
         {
             get
             {
-                return Data.ReadInt64BE(50);
+                return Data.ReadInt32BE(30);
+                //return Data.ReadInt64BE(50);
             }
             set
             {
-                Data.WriteBE(50, value);
+                Data.WriteBE(30, Convert.ToInt32(value));
+                //Data.WriteBE(50, value);
             }
         }
 
+        // for long values: template len 38 packet len 58
         public IfsReadRequest(uint handle, long offset, int length)
-            : base(58)
+            : base(42)
         {
             RequestResponseID = ID;
-            TemplateLength = 38;
+            TemplateLength = 22;
 
             Handle = handle;
             ReadLength = length;

@@ -45,12 +45,12 @@ namespace N400.Demo
 
                 using (var sw = new BinaryWriter(stream))
                 {
-                    sw.Write("C:\\tmp\\input.txt");
+                    sw.Write(File.ReadAllText("C:\\tmp\\input.txt"));
                     // not reset?
                     stream.Position = 0;
-                    using (var sr = new StreamReader(stream))
+                    using (var sr = new BinaryReader(stream))
                     {
-                        var str = sr.ReadToEnd();
+                        var str = sr.ReadString();
                         Console.WriteLine(str);
                     }
                 }
