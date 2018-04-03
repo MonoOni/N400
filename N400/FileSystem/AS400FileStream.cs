@@ -16,7 +16,7 @@ namespace N400.FileSystem
         /// <summary>
         /// The file's attributes from when the handle was opened.
         /// </summary>
-        public FileAttributes FileAttributes { get; private set; }
+        public FileAttributes InitialAttributes { get; private set; }
 
         OpenMode openMode;
         uint fileHandle;
@@ -26,13 +26,13 @@ namespace N400.FileSystem
 
         internal AS400FileStream(uint handle, OpenMode mode, FileAttributes attribs, IfsService ifs)
         {
-            FileAttributes = attribs;
+            InitialAttributes = attribs;
             openMode = mode;
             service = ifs;
             fileHandle = handle;
 
             position = 0;
-            length = Convert.ToInt64(FileAttributes.FileSize);
+            length = Convert.ToInt64(InitialAttributes.FileSize);
         }
 
         #region Base Class Members
@@ -149,7 +149,7 @@ namespace N400.FileSystem
         {
             var tmpBuf = buffer.Slice(offset, count);
 
-            var unwritten = service.Write(fileHandle, tmpBuf, Position, false, FileAttributes.DataCCSID);
+            var unwritten = service.Write(fileHandle, tmpBuf, Position, false, InitialAttributes.DataCCSID);
 
             var newLen = Position + (tmpBuf.Length - unwritten);
             Position = newLen;
