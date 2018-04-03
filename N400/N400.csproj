@@ -47,6 +47,7 @@
     <Compile Include="FileSystem\AS400FileStream.cs" />
     <Compile Include="FileSystem\FileAttributes.cs" />
     <Compile Include="FileSystem\FileSystem.cs" />
+    <Compile Include="FileSystem\ObjectType.cs" />
     <Compile Include="FileSystem\OpenMode.cs" />
     <Compile Include="FileSystem\ShareMode.cs" />
     <Compile Include="Packets\DataQueueClearRequest.cs" />

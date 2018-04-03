@@ -20,9 +20,9 @@ namespace N400.FileSystem
         /// </summary>
         public string FilePath { get; protected set; }
         /// <summary>
-        /// If the item is a directory.
+        /// What kind of object this file is.
         /// </summary>
-        public bool Directory { get; protected set; }
+        public ObjectType ObjectType { get; protected set; }
         /// <summary>
         /// If the item is a symbolic link.
         /// </summary>
@@ -54,7 +54,7 @@ namespace N400.FileSystem
 
         internal FileAttributes(string name,
             string path,
-            bool dir,
+            ObjectType type,
             bool link,
             ulong size,
             DateTime creation,
@@ -65,7 +65,7 @@ namespace N400.FileSystem
         {
             FileName = name;
             FilePath = path;
-            Directory = dir;
+            ObjectType = type;
             Symlink = link;
             FileSize = size;
             CreationDate = creation;

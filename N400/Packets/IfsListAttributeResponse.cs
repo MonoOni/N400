@@ -1,4 +1,5 @@
-﻿using System;
+﻿using N400.FileSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace N400.Packets
 
         public uint FixedAttributes => Data.ReadUInt32BE(50);
 
-        public ushort ObjectType => Data.ReadUInt16BE(54);
+        public ObjectType ObjectType => (ObjectType)Data.ReadUInt16BE(54);
 
         public ushort ExtendedAttributesCount => Data.ReadUInt16BE(56);
 

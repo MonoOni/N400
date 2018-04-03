@@ -108,7 +108,7 @@ namespace N400.Services
 
                         var attributes = new FileAttributes(nameString,
                             fullPath,
-                            listRes.ObjectType == 2,
+                            listRes.ObjectType,
                             listRes.Symlink,
                             listRes.FileSize,
                             listRes.CreationDate,
@@ -173,7 +173,7 @@ namespace N400.Services
                 var openRes = new IfsOpenFileResponse(boxed.Data);
                 var attribs = new FileAttributes(fileName,
                     fileName,
-                    false,
+                    ObjectType.File, // this isn't /exactly/ it, but default to it
                     false,
                     openRes.FileSize,
                     openRes.CreationDate,
