@@ -36,6 +36,13 @@ namespace N400.Demo
             //}
             using (var stream = fs.Open("/home/CALVIN/hello.test", create: true))
             {
+                //stream.Position = 4;
+                //stream.Write(Encoding.Default.GetBytes("TEST"), 0, 4);
+                //stream.Position = 0;
+                //var buf = new byte[16];
+                //stream.Read(buf, 0, 16);
+                //Console.WriteLine(Encoding.Default.GetString(buf));
+
                 using (var sw = new BinaryWriter(stream))
                 {
                     sw.Write("C:\\tmp\\input.txt");
