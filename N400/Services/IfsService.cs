@@ -190,6 +190,7 @@ namespace N400.Services
         // HACK: i hate that .NET uses signed values for Stream but the AS/400
         // APIs seem to assume unsigned values; so we'll risk it and use
         // signed values for dealing with read and write
+        // TODO: Packet chaining situations for read res/write req
         public byte[] Read(uint handle, long offset, int length)
         {
             EnsureInitialized();
