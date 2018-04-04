@@ -149,7 +149,11 @@ namespace N400.FileSystem
         {
             var tmpBuf = buffer.Slice(offset, count);
 
-            var unwritten = service.Write(fileHandle, tmpBuf, Position, false, InitialAttributes.DataCCSID);
+            var unwritten = service.Write(fileHandle,
+                tmpBuf,
+                Position,
+                false,
+                InitialAttributes.DataCCSID);
 
             var newLen = Position + (tmpBuf.Length - unwritten);
             Position = newLen;
