@@ -62,6 +62,7 @@
     <Compile Include="Packets\DataQueueWriteRequest.cs" />
     <Compile Include="Packets\IfsChainedPacketBase.cs" />
     <Compile Include="Packets\IfsCloseFileRequest.cs" />
+    <Compile Include="Packets\IfsCommitRequest.cs" />
     <Compile Include="Packets\IfsDeleteFileRequest.cs" />
     <Compile Include="Packets\IfsExchangeAttributesRequest.cs" />
     <Compile Include="Packets\IfsExchangeAttributesResponse.cs" />

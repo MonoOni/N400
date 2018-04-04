@@ -73,11 +73,11 @@ namespace N400.FileSystem
         }
 
         /// <summary>
-        /// No-op for this stream.
+        /// Forces the changes to the file to be commited.
         /// </summary>
         public override void Flush()
         {
-            // no-op
+            service.Commit(fileHandle);
         }
 
         // everything's bad because protocol is unsigned but Stream is signed

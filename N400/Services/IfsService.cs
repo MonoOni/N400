@@ -247,5 +247,15 @@ namespace N400.Services
             else
                 throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
         }
+
+        public void Commit(uint handle)
+        {
+            var commitReq = new IfsCommitRequest(handle);
+            WritePacket(commitReq);
+
+            var commitRes = ReadPacket<IfsReturnCodeResponse>();
+            if (commitRes.ReturnCode != 0)
+                throw new Exception($"The file service returned an error: {commitRes.ReturnCode}");
+        }
     }
 }
