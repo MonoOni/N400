@@ -145,6 +145,32 @@ namespace N400.Services
                 throw new Exception($"The file service returned an error: {deleteRes.ReturnCode}");
         }
 
+        public void DeleteDirectory(string pathName)
+        {
+            EnsureInitialized();
+
+            var pathBytes = BigEndianBytes(pathName);
+            var deleteReq = new IfsDeleteDirectoryRequest(pathBytes);
+            WritePacket(deleteReq);
+
+            var deleteRes = ReadPacket<IfsReturnCodeResponse>();
+            if (deleteRes.ReturnCode != 0)
+                throw new Exception($"The file service returned an error: {deleteRes.ReturnCode}");
+        }
+
+        public void CreateDirectory(string pathName)
+        {
+            EnsureInitialized();
+
+            var pathBytes = BigEndianBytes(pathName);
+            var createReq = new IfsCreateDirectoryRequest(pathBytes);
+            WritePacket(createReq);
+
+            var createRes = ReadPacket<IfsReturnCodeResponse>();
+            if (createRes.ReturnCode != 0)
+                throw new Exception($"The file service returned an error: {createRes.ReturnCode}");
+        }
+
         public AS400FileStream Open(string fileName,
             OpenMode openMode,
             ShareMode shareMode,

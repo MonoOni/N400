@@ -41,7 +41,6 @@ namespace N400.Demo
                 using (var sw = new BinaryWriter(stream))
                 {
                     sw.Write(File.ReadAllText("C:\\tmp\\input.txt"));
-                    // not reset?
                     stream.Position = 0;
                     using (var sr = new BinaryReader(stream))
                     {
@@ -51,6 +50,8 @@ namespace N400.Demo
                 }
             }
             fs.DeleteFile(fileName);
+            fs.CreateDirectory("/home/CALVIN/hello.dir");
+            fs.DeleteDirectory("/home/CALVIN/hello.dir");
             var files = fs.List("/home/CALVIN/*");
 
             foreach (var file in files)

@@ -67,6 +67,30 @@ namespace N400.FileSystem
         }
 
         /// <summary>
+        /// Deletes a directory.
+        /// </summary>
+        /// <param name="path">The path of the directory to delete.</param>
+        public void DeleteDirectory(string path)
+        {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            service.DeleteDirectory(path);
+        }
+
+        /// <summary>
+        /// Creates a directory.
+        /// </summary>
+        /// <param name="path">The path of the directory to delete.</param>
+        public void CreateDirectory(string path)
+        {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            service.CreateDirectory(path);
+        }
+
+        /// <summary>
         /// Opens a file handle on the server.
         /// </summary>
         /// <param name="path">The path of the item to open.</param>

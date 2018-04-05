@@ -60,9 +60,11 @@
     <Compile Include="Packets\DataQueueRequestBase.cs" />
     <Compile Include="Packets\DataQueueReturnCodeResponse.cs" />
     <Compile Include="Packets\DataQueueWriteRequest.cs" />
+    <Compile Include="Packets\IfsDeleteDirectoryRequest.cs" />
     <Compile Include="Packets\IfsChainedPacketBase.cs" />
     <Compile Include="Packets\IfsCloseFileRequest.cs" />
     <Compile Include="Packets\IfsCommitRequest.cs" />
+    <Compile Include="Packets\IfsCreateDirectoryRequest.cs" />
     <Compile Include="Packets\IfsDeleteFileRequest.cs" />
     <Compile Include="Packets\IfsExchangeAttributesRequest.cs" />
     <Compile Include="Packets\IfsExchangeAttributesResponse.cs" />

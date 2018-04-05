@@ -93,7 +93,6 @@ namespace N400.FileSystem
         /// <returns>How many bytes were read.</returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            // HACK: try to satisfy StreamReader (not working yet)
             if (Position >= Length)
                 return 0;
 
