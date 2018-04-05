@@ -17,50 +17,35 @@ namespace N400.Services
 
         public const ushort SERVICE_ID = 0xE002;
 
-        bool attributesExchanged;
-
         public IfsService(Server server) :
             base(server, SERVICE_ID, "as-file", null, 8473, 9473)
         {
-            attributesExchanged = false;
         }
 
-        void EnsureInitialized()
+        protected override bool Initialize()
         {
-            if (!Connected)
-            {
-                Connect();
-                if (!Connected)
-                    throw new Exception("Couldn't connect to the file service.");
+            // ...signon returns uint but we need ushort?
+            // this is unicode because ebcdic makes no sense for unix names
+            var infoReq = new IfsExchangeAttributesRequest(
+                new ushort[] {
+                    1200, // UTF-16
+                    13488, // UTF-16 big endian
+                    61952, // legacy UTF-16 BE
+                });
+            WritePacket(infoReq);
 
-                attributesExchanged = false;
-            }
-            if (!attributesExchanged)
-            {
-                // ...signon returns uint but we need ushort?
+            var infoRes = ReadPacket<IfsExchangeAttributesResponse>();
+            if (infoRes.PacketLength < 22)
+                throw new Exception("The packet returned was too small.");
+            if (infoRes.ReturnCode != 0)
+                throw new Exception(
+                    "An error occured when exchanging attributes with the file service: " +
+                    $"{infoRes.ReturnCode}");
 
-                // this is unicode because ebcdic makes no sense for unix names
-                var infoReq = new IfsExchangeAttributesRequest(
-                    new ushort[] {
-                        1200, // UTF-16
-                        13488, // UTF-16 big endian
-                        61952, // legacy UTF-16 BE
-                    });
-                WritePacket(infoReq);
+            if (infoRes.DataStreamLevel < 16)
+                throw new Exception("The data stream level doesn't support the necessary features.");
 
-                var infoRes = ReadPacket<IfsExchangeAttributesResponse>();
-                if (infoRes.PacketLength < 22)
-                    throw new Exception("The packet returned was too small.");
-                if (infoRes.ReturnCode != 0)
-                    throw new Exception(
-                        "An error occured when exchanging attributes with the file service: " +
-                        $"{infoRes.ReturnCode}");
-
-                if (infoRes.DataStreamLevel < 16)
-                    throw new Exception("The data stream level doesn't support the necessary features.");
-
-                attributesExchanged = true;
-            }
+            return true;
         }
 
         static byte[] BigEndianBytes(string s) => Encoding.BigEndianUnicode.GetBytes(s);
@@ -276,6 +261,8 @@ namespace N400.Services
 
         public void Commit(uint handle)
         {
+            EnsureInitialized();
+
             var commitReq = new IfsCommitRequest(handle);
             WritePacket(commitReq);
 

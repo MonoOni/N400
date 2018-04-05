@@ -36,8 +36,7 @@ namespace N400.Services
 
         public SignonServiceResponses Signon()
         {
-            if (!Connected)
-                throw new Exception("Couldn't connect to the signon service.");
+            EnsureInitialized();
 
             // first, exchange seeds
             var seedReq = new SignonSeedExchangeSeedRequest();
@@ -60,5 +59,9 @@ namespace N400.Services
 
             return new SignonServiceResponses(infoRes, seedRes);
         }
+
+        // we don't need this because signon is a special case where we
+        // exchange attribs, do auth, then finish what we need to
+        protected override bool Initialize() => true;
     }
 }

@@ -10,8 +10,6 @@ namespace N400.Services
     {
         public const ushort SERVICE_ID = 0xE008;
 
-        bool attributesExchanged;
-
         public RemoteCommandService(Server server)
             : base(server, SERVICE_ID, "as-rmtcmd", null, 8475, 9475)
         {
@@ -19,16 +17,9 @@ namespace N400.Services
             throw new NotImplementedException();
         }
 
-        public void GetJobInfo()
+        protected override bool Initialize()
         {
-            if (!attributesExchanged)
-                ExchangeAttributes();
-        }
-
-        void ExchangeAttributes()
-        {
-            Connect();
-            Disconnect();
+            throw new NotImplementedException();
         }
     }
 }

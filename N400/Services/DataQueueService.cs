@@ -13,52 +13,38 @@ namespace N400.Services
     {
         public const ushort SERVICE_ID = 0xE007;
 
-        bool attributesExchanged;
-
         public DataQueueService(Server server)
             : base (server, SERVICE_ID, "as-dtaq", null, 8472, 9472)
         {
-            attributesExchanged = false;
         }
-        
-        void EnsureInitialized()
+
+        protected override bool Initialize()
         {
-            if (!Connected)
+            var exchangeRequest = new DataQueueExchangeAttributesRequest();
+            WritePacket(exchangeRequest);
+            // we need to check the length and/or ID to then cast it later
+            var res = ReadPacket<Packet>();
+            if (res.PacketLength < 22)
+                throw new Exception("Invalid packet length.");
+            // DataQueueReturnCodeResponse
+            else if (res.RequestResponseID == DataQueueReturnCodeResponse.ID)
             {
-                Connect();
-                if (!Connected)
-                    throw new Exception("Couldn't connect to the data queue service.");
-
-                attributesExchanged = false;
+                var rcRes = new DataQueueReturnCodeResponse(res.Data);
+                throw new Exception(
+                    "An error occured when exchanging attributes with the data queue service: " +
+                    $"{rcRes.ReturnCode}");
             }
-            if (!attributesExchanged)
+            // DataQueueExchangeAttributesResponse (basically just Packet)
+            else if (res.RequestResponseID == 0x8000)
             {
-                var exchangeRequest = new DataQueueExchangeAttributesRequest();
-                WritePacket(exchangeRequest);
-                // we need to check the length and/or ID to then cast it later
-                var res = ReadPacket<Packet>();
-                if (res.PacketLength < 22)
-                    throw new Exception("Invalid packet length.");
-                // DataQueueReturnCodeResponse
-                else if (res.RequestResponseID == DataQueueReturnCodeResponse.ID)
-                {
-                    var rcRes = new DataQueueReturnCodeResponse(res.Data);
-                    throw new Exception(
-                        "An error occured when exchanging attributes with the data queue service: " +
-                        $"{rcRes.ReturnCode}");
-                }
-                // DataQueueExchangeAttributesResponse (basically just Packet)
-                else if (res.RequestResponseID == 0x8000)
-                {
-                    // there's nothing in the packet, so this is good
-                    // so do nothing and fall through
-                }
-                else
-                    throw new Exception("Invalid data queue attributes exchange response ID " +
-                        $"{res.RequestResponseID}");
-
-                attributesExchanged = true;
+                // there's nothing in the packet, so this is good
+                // so do nothing and fall through
             }
+            else
+                throw new Exception("Invalid data queue attributes exchange response ID " +
+                    $"{res.RequestResponseID}");
+
+            return true;
         }
 
         public void Create(byte[] name,

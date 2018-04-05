@@ -30,6 +30,11 @@ namespace N400.Services
         /// </summary>
         public bool Connected { get; private set; }
         /// <summary>
+        /// If the service has done any needed tasks to initialize the session,
+        /// such as attribute exchanges.
+        /// </summary>
+        public bool Initialized { get; private set; }
+        /// <summary>
         /// The ID used when making connections to the server.
         /// </summary>
         public uint ConnectionID { get; private set; }
@@ -94,6 +99,8 @@ namespace N400.Services
             SecureName = tlsName ?? name + "-s";
             Port = port;
             SecurePort = tlsPort;
+
+            Initialized = false;
         }
 
         /// <summary>
@@ -124,7 +131,7 @@ namespace N400.Services
             //}
             finally
             {
-
+                Initialized = false;
             }
         }
 
@@ -174,6 +181,36 @@ namespace N400.Services
             p.CorrelationID = ConnectionID; // XXX
 
             Packet.WritePacket(Connection.Socket, p);
+        }
+
+        /// <summary>
+        /// Performs any initialization tasks after establishing a connection.
+        /// </summary>
+        /// <returns>If the service is an initialized state.</returns>
+        protected abstract bool Initialize();
+
+        /// <summary>
+        /// Ensures that the service is connected and initialized. If not
+        /// connected or initialized, these tasks will be performed.
+        /// </summary>
+        /// <remarks>
+        /// It is strongly recommended that any inheriting classes' members
+        /// call these functions before communicating to the remote service.
+        /// </remarks>
+        protected void EnsureInitialized()
+        {
+            if (!Connected)
+            {
+                Connect();
+                if (!Connected)
+                    throw new Exception("Couldn't connect to the service.");
+            }
+            if (!Initialized)
+            {
+                Initialized = Initialize();
+                if (!Initialized)
+                    throw new Exception("Couldn't initialize the service.");
+            }
         }
     }
 }
