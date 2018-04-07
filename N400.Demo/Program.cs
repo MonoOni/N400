@@ -52,6 +52,9 @@ namespace N400.Demo
             fs.DeleteFile(fileName);
             fs.CreateDirectory("/home/CALVIN/hello.dir");
             fs.DeleteDirectory("/home/CALVIN/hello.dir");
+            fs.Copy("/home/CALVIN/vv", "/home/CALVIN/testitem");
+            fs.Rename("/home/CALVIN/testitem", "/home/CALVIN/newitem");
+            fs.DeleteFile("/home/CALVIN/newitem");
             var files = fs.List("/home/CALVIN/*");
 
             foreach (var file in files)

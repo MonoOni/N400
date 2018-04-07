@@ -91,6 +91,51 @@ namespace N400.FileSystem
         }
 
         /// <summary>
+        /// Copies an item to a new location.
+        /// </summary>
+        /// <param name="source">The original name of the item.</param>
+        /// <param name="target">The new name of the item.</param>
+        /// <param name="replace">
+        /// The behaviour to take with an existing target.
+        /// </param>
+        /// <param name="depth">
+        /// When the item is a directory, how to deal with the source's child
+        /// items.
+        /// </param>
+        public void Copy(string source,
+            string target,
+            CopyReplace replace = CopyReplace.Replace,
+            CopyDepth depth = CopyDepth.Deep)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
+            service.Copy(source, target, replace, depth);
+        }
+
+        /// <summary>
+        /// Renames an item.
+        /// </summary>
+        /// <param name="source">The original name of the item.</param>
+        /// <param name="target">The new name of the item.</param>
+        /// <param name="replace">
+        /// If to replace an existing item with the new one.
+        /// </param>
+        public void Rename(string source,
+            string target,
+            bool replace = true)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
+            service.Rename(source, target, replace);
+        }
+
+        /// <summary>
         /// Opens a file handle on the server.
         /// </summary>
         /// <param name="path">The path of the item to open.</param>

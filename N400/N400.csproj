@@ -45,6 +45,8 @@
     <Compile Include="DataQueues\DataQueueAuthority.cs" />
     <Compile Include="DataQueues\DataQueueEntry.cs" />
     <Compile Include="FileSystem\AS400FileStream.cs" />
+    <Compile Include="FileSystem\CopyDepth.cs" />
+    <Compile Include="FileSystem\CopyReplace.cs" />
     <Compile Include="FileSystem\FileAttributes.cs" />
     <Compile Include="FileSystem\FileSystem.cs" />
     <Compile Include="FileSystem\ObjectType.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="Packets\DataQueueRequestBase.cs" />
     <Compile Include="Packets\DataQueueReturnCodeResponse.cs" />
     <Compile Include="Packets\DataQueueWriteRequest.cs" />
+    <Compile Include="Packets\IfsCopyRequest.cs" />
     <Compile Include="Packets\IfsDeleteDirectoryRequest.cs" />
     <Compile Include="Packets\IfsChainedPacketBase.cs" />
     <Compile Include="Packets\IfsCloseFileRequest.cs" />
@@ -74,6 +77,7 @@
     <Compile Include="Packets\IfsOpenFileResponse.cs" />
     <Compile Include="Packets\IfsReadRequest.cs" />
     <Compile Include="Packets\IfsReadResponse.cs" />
+    <Compile Include="Packets\IfsRenameRequest.cs" />
     <Compile Include="Packets\IfsReturnCodeResponse.cs" />
     <Compile Include="Packets\IfsWriteRequest.cs" />
     <Compile Include="Packets\IfsWriteResponse.cs" />

@@ -156,6 +156,44 @@ namespace N400.Services
                 throw new Exception($"The file service returned an error: {createRes.ReturnCode}");
         }
 
+        public void Copy(string source,
+            string target,
+            CopyReplace replace,
+            CopyDepth depth)
+        {
+            EnsureInitialized();
+
+            var sourcePathBytes = BigEndianBytes(source);
+            var targetPathBytes = BigEndianBytes(target);
+            var copyReq = new IfsCopyRequest(sourcePathBytes,
+                targetPathBytes,
+                replace,
+                depth);
+            WritePacket(copyReq);
+
+            var copyRes = ReadPacket<IfsReturnCodeResponse>();
+            if (copyRes.ReturnCode != 0)
+                throw new Exception($"The file service returned an error: {copyRes.ReturnCode}");
+        }
+
+        public void Rename(string source,
+            string target,
+            bool replace)
+        {
+            EnsureInitialized();
+
+            var sourcePathBytes = BigEndianBytes(source);
+            var targetPathBytes = BigEndianBytes(target);
+            var renameReq = new IfsRenameRequest(sourcePathBytes,
+                targetPathBytes,
+                replace);
+            WritePacket(renameReq);
+
+            var renameRes = ReadPacket<IfsReturnCodeResponse>();
+            if (renameRes.ReturnCode != 0)
+                throw new Exception($"The file service returned an error: {renameRes.ReturnCode}");
+        }
+
         public AS400FileStream Open(string fileName,
             OpenMode openMode,
             ShareMode shareMode,
