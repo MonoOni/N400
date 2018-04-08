@@ -48,6 +48,33 @@ namespace N400.Services
             return true;
         }
 
+        // checks validity of input, and if non-success, throw
+        static void CheckForError(IfsReturnCodeResponse rcr,
+            Packet request = null,
+            string path = null)
+        {
+            if (rcr == null)
+                throw new ArgumentNullException(nameof(rcr));
+            // in case the service gets *really* confused and returns bogus
+            else if (rcr.RequestResponseID != IfsReturnCodeResponse.ID)
+                throw new ArgumentException("The packet given wasn't of the right type.", nameof(rcr));
+
+            switch (rcr.ReturnCode)
+            {
+                case FILE_NOT_FOUND:
+                    throw new System.IO.FileNotFoundException("The remote service couldn't find the path.",
+                        path);
+                case PATH_NOT_FOUND:
+                    throw new System.IO.DirectoryNotFoundException("The remote service couldn't find the path.");
+                case ACCESS_DENIED:
+                    throw new UnauthorizedAccessException("Access was denied to the item.");
+                default:
+                    throw new Exception($"The file service returned an unknown error: {rcr.ReturnCode}");
+                case 0:
+                    return;
+            }
+        }
+
         static byte[] BigEndianBytes(string s) => Encoding.BigEndianUnicode.GetBytes(s);
 
         public List<FileAttributes> List(string path, PatternMatchingMode globMode)
@@ -74,13 +101,11 @@ namespace N400.Services
                 {
                     var listRes = new IfsReturnCodeResponse(boxed.Data);
                     chain = listRes.Chain;
-                    switch (listRes.ReturnCode)
-                    {
-                        case NO_MORE_FILES:
-                            goto end;
-                        default:
-                            throw new Exception($"The file service returned an error: {listRes.ReturnCode}");
-                    }
+                    // special case because we need to control flow
+                    if (listRes.ReturnCode == NO_MORE_FILES)
+                        break;
+                    else
+                        CheckForError(listRes, listReq, path);
                 }
                 else if (boxed.RequestResponseID == IfsListAttributeResponse.ID)
                 {
@@ -113,7 +138,6 @@ namespace N400.Services
                 else
                     throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
             }
-            end:
             return list;
         }
 
@@ -126,8 +150,7 @@ namespace N400.Services
             WritePacket(deleteReq);
 
             var deleteRes = ReadPacket<IfsReturnCodeResponse>();
-            if (deleteRes.ReturnCode != 0)
-                throw new Exception($"The file service returned an error: {deleteRes.ReturnCode}");
+            CheckForError(deleteRes, deleteReq, fileName);
         }
 
         public void DeleteDirectory(string pathName)
@@ -139,8 +162,7 @@ namespace N400.Services
             WritePacket(deleteReq);
 
             var deleteRes = ReadPacket<IfsReturnCodeResponse>();
-            if (deleteRes.ReturnCode != 0)
-                throw new Exception($"The file service returned an error: {deleteRes.ReturnCode}");
+            CheckForError(deleteRes, deleteReq, pathName);
         }
 
         public void CreateDirectory(string pathName)
@@ -152,8 +174,7 @@ namespace N400.Services
             WritePacket(createReq);
 
             var createRes = ReadPacket<IfsReturnCodeResponse>();
-            if (createRes.ReturnCode != 0)
-                throw new Exception($"The file service returned an error: {createRes.ReturnCode}");
+            CheckForError(createRes, createReq, pathName);
         }
 
         public void Copy(string source,
@@ -172,8 +193,7 @@ namespace N400.Services
             WritePacket(copyReq);
 
             var copyRes = ReadPacket<IfsReturnCodeResponse>();
-            if (copyRes.ReturnCode != 0)
-                throw new Exception($"The file service returned an error: {copyRes.ReturnCode}");
+            CheckForError(copyRes, copyReq, source);
         }
 
         public void Rename(string source,
@@ -190,8 +210,7 @@ namespace N400.Services
             WritePacket(renameReq);
 
             var renameRes = ReadPacket<IfsReturnCodeResponse>();
-            if (renameRes.ReturnCode != 0)
-                throw new Exception($"The file service returned an error: {renameRes.ReturnCode}");
+            CheckForError(renameRes, renameReq, source);
         }
 
         public AS400FileStream Open(string fileName,
@@ -215,7 +234,8 @@ namespace N400.Services
             if (boxed.RequestResponseID == IfsReturnCodeResponse.ID)
             {
                 var openRes = new IfsReturnCodeResponse(boxed.Data);
-                throw new Exception($"The file service returned an error: {openRes.ReturnCode}");
+                CheckForError(openRes, openReq, fileName);
+                return null;
             }
             else if (boxed.RequestResponseID == IfsOpenFileResponse.ID)
             {
@@ -238,7 +258,7 @@ namespace N400.Services
                 throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
         }
 
-        public ushort Close(uint handle)
+        public void Close(uint handle)
         {
             EnsureInitialized();
 
@@ -246,7 +266,7 @@ namespace N400.Services
             WritePacket(closeReq);
 
             var closeRes = ReadPacket<IfsReturnCodeResponse>();
-            return closeRes.ReturnCode;
+            CheckForError(closeRes, closeRes, null);
         }
 
         // HACK: i hate that .NET uses signed values for Stream but the AS/400
@@ -263,13 +283,14 @@ namespace N400.Services
 
             if (boxed.RequestResponseID == IfsReturnCodeResponse.ID)
             {
-                var openRes = new IfsReturnCodeResponse(boxed.Data);
-                throw new Exception($"The file service returned an error: {openRes.ReturnCode}");
+                var readRes = new IfsReturnCodeResponse(boxed.Data);
+                CheckForError(readRes, readReq, null);
+                return null;
             }
             else if (boxed.RequestResponseID == IfsReadResponse.ID)
             {
-                var openRes = new IfsReadResponse(boxed.Data);
-                return openRes.FieldData;
+                var readRes = new IfsReadResponse(boxed.Data);
+                return readRes.FieldData;
             }
             else
                 throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
@@ -285,13 +306,14 @@ namespace N400.Services
 
             if (boxed.RequestResponseID == IfsReturnCodeResponse.ID)
             {
-                var openRes = new IfsReturnCodeResponse(boxed.Data);
-                throw new Exception($"The file service returned an error: {openRes.ReturnCode}");
+                var writeRes = new IfsReturnCodeResponse(boxed.Data);
+                CheckForError(writeRes, writeRes, null);
+                return -1;
             }
             else if (boxed.RequestResponseID == IfsWriteResponse.ID)
             {
-                var openRes = new IfsWriteResponse(boxed.Data);
-                return openRes.BytesNotWritten;
+                var writeRes = new IfsWriteResponse(boxed.Data);
+                return writeRes.BytesNotWritten;
             }
             else
                 throw new Exception($"The file service returned an unknown packet ID: {boxed.RequestResponseID}");
@@ -305,8 +327,7 @@ namespace N400.Services
             WritePacket(commitReq);
 
             var commitRes = ReadPacket<IfsReturnCodeResponse>();
-            if (commitRes.ReturnCode != 0)
-                throw new Exception($"The file service returned an error: {commitRes.ReturnCode}");
+            CheckForError(commitRes, commitReq, null);
         }
     }
 }
