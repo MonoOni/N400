@@ -176,14 +176,14 @@ namespace N400
                 Packet.WritePacket(cs, seedReq); // we can't use Service
                 var seedRes = Packet.ReadPacket<RandomSeedExchangeResponse>(cs);
                 if (seedRes.ReturnCode != 0)
-                    throw new Exception($"Invalid return code from seed exchange: {seedRes.ReturnCode}");
+                    throw new AS400SignonException(seedRes);
                 // start server request
                 var encryptedPassword = PasswordEncrypt.EncryptPassword(User, Password, seedReq.Seed, seedRes.Seed, PasswordLevel);
                 var serverReq = new StartServerRequest(User.ToUpperInvariant(), encryptedPassword, service.ID);
                 Packet.WritePacket(cs, serverReq);
                 var serverRes = Packet.ReadPacket<StartServerResponse>(cs);
                 if (serverRes.ReturnCode != 0)
-                    throw new Exception($"Invalid return code from server exchange: {serverRes.ReturnCode}");
+                    throw new AS400SignonException(serverRes);
 
                 c = new Connection(cs, service, serverRes.CorrelationID, serverRes.JobName);
             }

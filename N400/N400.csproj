@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AS400SignonException.cs" />
     <Compile Include="DataQueues\DataQueue.cs" />
     <Compile Include="DataQueues\DataQueueAuthority.cs" />
     <Compile Include="DataQueues\DataQueueEntry.cs" />

@@ -46,7 +46,7 @@ namespace N400.Services
             // get the response
             var seedRes = ReadPacket<SignonSeedExchangeResponse>();
             if (seedRes.ReturnCode != 0)
-                throw new Exception($"Invalid return code from seed exchange: {seedRes.ReturnCode}");
+                throw new AS400SignonException(seedRes);
 
             // write out an info request
             var encryptedPassword = PasswordEncrypt.EncryptPassword(Server.User, Server.Password, seedReq.ClientSeed, seedRes.ServerSeed, seedRes.PasswordLevel);
@@ -55,7 +55,7 @@ namespace N400.Services
 
             var infoRes = ReadPacket<SignonInfoResponse>();
             if (infoRes.ReturnCode != 0)
-                throw new Exception($"Invalid return code from info exchange: {infoRes.ReturnCode}");
+                throw new AS400SignonException(infoRes);
 
             return new SignonServiceResponses(infoRes, seedRes);
         }
