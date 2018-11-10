@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N400.Native.Data", "N400.Native.Data\N400.Native.Data.csproj", "{E5C1D293-5ACE-4679-B699-78F39A9ED521}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{61309E1F-FBA0-4883-AEE8-FD8FDE4BC7DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61309E1F-FBA0-4883-AEE8-FD8FDE4BC7DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61309E1F-FBA0-4883-AEE8-FD8FDE4BC7DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5C1D293-5ACE-4679-B699-78F39A9ED521}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5C1D293-5ACE-4679-B699-78F39A9ED521}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5C1D293-5ACE-4679-B699-78F39A9ED521}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5C1D293-5ACE-4679-B699-78F39A9ED521}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
