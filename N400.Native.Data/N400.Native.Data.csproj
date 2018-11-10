@@ -40,9 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internals\Column.cs" />
     <Compile Include="Internals\SqlCli.cs" />
     <Compile Include="Internals\SqlFreeStmtOptions.cs" />
     <Compile Include="Internals\SqlStatusReturnCode.cs" />
+    <Compile Include="Internals\SqlType.cs" />
     <Compile Include="PaseDbCommand.cs">
       <SubType>Component</SubType>
     </Compile>

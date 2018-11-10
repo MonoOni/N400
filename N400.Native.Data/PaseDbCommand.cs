@@ -8,13 +8,19 @@ using System.Threading.Tasks;
 
 namespace N400.Native.Data
 {
-    class PaseDbCommand : DbCommand, IDisposable
+    /// <summary>
+    /// Represents a command to run in DB2 for i.
+    /// </summary>
+    public class PaseDbCommand : DbCommand, IDisposable
     {
         internal PaseDbConnection _dbc;
         internal int _stmt;
         bool _prepared;
         string _commandText;
 
+        /// <summary>
+        /// The text representing the SQL to run.
+        /// </summary>
         public override string CommandText
         {
             get
@@ -80,6 +86,9 @@ namespace N400.Native.Data
             }
         }
 
+        /// <summary>
+        /// The DB2 for i connection being used.
+        /// </summary>
         protected override DbConnection DbConnection
         {
             get
@@ -117,6 +126,9 @@ namespace N400.Native.Data
             }
         }
 
+        /// <summary>
+        /// Cancels the current command being run.
+        /// </summary>
         public override void Cancel()
         {
             if (Internals.SqlCli.SQLCancel(_stmt) != Internals.SqlStatusReturnCode.Success)
@@ -160,17 +172,9 @@ namespace N400.Native.Data
                 if (Internals.SqlCli.SQLFetch(_stmt) != Internals.SqlStatusReturnCode.Success)
                     throw PaseDbException.FromSqlError(this);
 
-                // Get column
-                // TODO: Non-stringification, by parsing DescribeCol and having a way to handle types
-                var scalar = new StringBuilder(Internals.SqlCli.SQL_MAX_MESSAGE_LENGTH + 1);
-                int outLen;
-                if (Internals.SqlCli.SQLGetCol(_stmt, 1, 1 /* SQL_CHAR */, scalar, scalar.Capacity, out outLen) != Internals.SqlStatusReturnCode.Success)
-                    throw PaseDbException.FromSqlError(this);
-
-                if (outLen == -1)
-                    return DBNull.Value;
-
-                return scalar.ToString();
+                // Get description
+                var col = new Internals.Column(this, 1);
+                return col.GetValue();
             }
             finally
             {
